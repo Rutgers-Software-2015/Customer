@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 import ADT.MenuItem;
 import ADT.Order;
+import Login.LoginWindow;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;
@@ -39,9 +40,11 @@ import javax.swing.UIManager;
 
 public class CustomerGUI extends JFrame implements ActionListener {
 
+	/*
 	public static void main(String[] args) {
 		new CustomerGUI();
 	}
+	*/
 	private boolean done = false;
 	private JButton buttonAddOrder;
 	private JButton buttonRemoveOrder;
@@ -75,7 +78,13 @@ public class CustomerGUI extends JFrame implements ActionListener {
 	private int orderCount = 0;
 	
 	public CustomerGUI() {
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                new LoginWindow();
+                dispose();
+            }
+        });
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setBackground(Color.WHITE);
 		setTitle("Customer");
 		this.setSize(960,640);
