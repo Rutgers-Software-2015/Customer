@@ -1,4 +1,4 @@
-package GUI;
+package Customer;
 
 import javax.swing.JFrame;
 
@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 
 import ADT.MenuItem;
 import ADT.Order;
-import Handlers.CustomerHandler;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.MatteBorder;

@@ -1,4 +1,4 @@
-package Handlers;
+package Customer;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -38,7 +38,7 @@ public class CustomerHandler {
 		/*
 		 * mySQL statement to get an available employee
 		 */
-		TableOrder temp = new TableOrder(TOTAL_ORDERS, new Employee(0), TABLE_ID);
+		TableOrder temp = new TableOrder(TOTAL_ORDERS, new Employee(), TABLE_ID);
 		return temp;
 	}
 	
