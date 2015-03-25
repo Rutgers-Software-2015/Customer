@@ -12,17 +12,19 @@ import ADT.*;
 
 public class CustomerHandler {
 	
-	private int TABLE_ID; //Which table the customers are sitting.
-	private int CUSTOMER_COUNT; //The amount of customers sitting at the table.
-	private int TABLE_STATUS; //Current status of the table. 
+	public int TABLE_ID; //Which table the customers are sitting.
+	public int CUSTOMER_COUNT; //The amount of customers sitting at the table.
+	public int TABLE_STATUS; //Current status of the table. 
 	public double TOTAL_COST; //The total cost of all the menu items in TOTAL ORDER.
 	public LinkedList<Order> TOTAL_ORDERS; //Queue of all the orders placed by the customer.
-	private boolean TABLE_OCCUPANCY; //TRUE if there is at least one customer as this table, and FALSE if the table is vacant.
-	private Employee waiter;
+	public boolean TABLE_OCCUPANCY; //TRUE if there is at least one customer as this table, and FALSE if the table is vacant.
+	public int TOTAL_QUANTITY;
+	public Employee waiter;
 	
 	public CustomerHandler(int TABLE_ID) {
 		this.TABLE_ID = TABLE_ID;
 		TOTAL_ORDERS = new LinkedList<Order>();
+		TOTAL_QUANTITY = 0;
 	}
 	
 	public void setNumberCustomers(int n) {
@@ -34,11 +36,14 @@ public class CustomerHandler {
 	 * and returns it the system.
 	 * 
 	 */
-	public TableOrder Place_Order(int MENU_ID) {
+	public TableOrder Place_Order() {
 		/*
 		 * mySQL statement to get an available employee
 		 */
 		TableOrder temp = new TableOrder(TOTAL_ORDERS, new Employee(), TABLE_ID);
+		TOTAL_ORDERS.clear();
+		TOTAL_QUANTITY = 0;
+		TOTAL_COST = 0;
 		return temp;
 	}
 	
@@ -47,30 +52,52 @@ public class CustomerHandler {
 	 * and updates the TOTAL COST field. Returns TRUE if successful.
 	 */
 	public boolean Add_Order(Order n) {
-		if(n != null) {
+		boolean inside = false;
+		for(int i = 0; i < TOTAL_ORDERS.size(); i++) {
+			if(n.item.MENU_ID == TOTAL_ORDERS.get(i).item.MENU_ID) {
+				TOTAL_ORDERS.get(i).Quantity++;
+				TOTAL_COST += n.item.PRICE;
+				updateCount();
+				return true;
+			}
+		}
+		if(n != null && !inside) {
 			TOTAL_ORDERS.add(n);
-			TOTAL_COST += n.item.PRICE * n.Quantity;
+			TOTAL_COST += n.item.PRICE;
+			updateCount();
 			return true;
 		}
 		return false;
 	}
 	
+	private void updateCount() {
+		TOTAL_QUANTITY = 0;
+		for(int i = 0; i < TOTAL_ORDERS.size(); i++){
+			TOTAL_QUANTITY += TOTAL_ORDERS.get(i).Quantity;
+		}
+	}
+
 	/*
 	 * This function removes a certain Order from the TOTAL ORDER queue, 
 	 * and readjusts the TOTAL COST field. Returns TRUE if successful.
 	 */
-	public boolean Remove_Order(int ORDER_ID) {
+	public boolean Remove_Order(int MENU_ID) {
 		Order temp;
 		double cost = 0;
 		boolean found = false;
 		LinkedList<Order> other = new LinkedList<Order>();
 		for(int i = 0; i < TOTAL_ORDERS.size(); i++) {
 			temp = TOTAL_ORDERS.get(i);
-			cost = temp.item.PRICE * temp.Quantity;
-			if(temp.Order_ID == ORDER_ID) {
-				TOTAL_ORDERS.remove(i);
+			cost = temp.item.PRICE;
+			if(temp.item.MENU_ID == MENU_ID) {
+				if(temp.Quantity > 1) {
+					temp.Quantity -= 1;
+				} else {
+					TOTAL_ORDERS.remove(i);
+					found = true;
+				}
+				updateCount();
 				TOTAL_COST -= cost;
-				found = true;
 			}
 		}
 		return found;

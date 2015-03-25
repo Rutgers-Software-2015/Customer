@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 
 import ADT.MenuItem;
 import ADT.Order;
+import ADT.TableOrder;
+import KitchenStaff.KitchenStaffHandler;
 import Login.LoginWindow;
 
 import javax.swing.border.BevelBorder;
@@ -37,6 +39,7 @@ import java.text.NumberFormat;
 import java.util.Vector;
 
 import javax.swing.UIManager;
+import javax.swing.ListSelectionModel;
 
 public class CustomerGUI extends JFrame implements ActionListener {
 
@@ -76,6 +79,7 @@ public class CustomerGUI extends JFrame implements ActionListener {
 	private MenuItem[] desitems;
 	private int orderNumber = 0;
 	private int orderCount = 0;
+	private JButton btnLogOut;
 	
 	public CustomerGUI() {
 		addWindowListener(new java.awt.event.WindowAdapter() {
@@ -108,6 +112,7 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		ButtonPlaceOrder = new JButton("Place Order");
 		ButtonPlaceOrder.setBounds(342, 333, 310, 114);
 		Overall.add(ButtonPlaceOrder);
+		ButtonPlaceOrder.addActionListener(this);
 		
 		ButtonCallWaiter = new JButton("Call Waiter");
 		ButtonCallWaiter.setBounds(10, 333, 322, 114);
@@ -122,10 +127,12 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		Overall.add(scrollPane);
 		
 		tableOfOrders = new JTable();
-		tableOfOrders.setShowVerticalLines(false);
-		tableOfOrders.setShowHorizontalLines(false);
-		tableOfOrders.setColumnSelectionAllowed(true);
+		tableOfOrders.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		tableOfOrders.setShowGrid(false);
+		tableOfOrders.setShowHorizontalLines(false);
+		tableOfOrders.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		tableOfOrders.setShowVerticalLines(false);
+		tableOfOrders.setColumnSelectionAllowed(true);
 		tableOfOrders.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null, null, null},
@@ -193,22 +200,29 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		scrollPane.setViewportView(tableOfOrders);
 		
 		panel = new JPanel();
-		panel.setBounds(662, 21, 272, 301);
+		panel.setBounds(662, 152, 272, 170);
 		Overall.add(panel);
 		panel.setBorder(new TitledBorder(null, "Payment Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setLayout(null);
 		
 		quantityInfo = new JLabel("Total Items:");
-		quantityInfo.setFont(new Font("Verdana", Font.BOLD, 20));
-		quantityInfo.setBounds(10, 32, 252, 148);
+		quantityInfo.setFont(new Font("Verdana", Font.PLAIN, 16));
+		quantityInfo.setBounds(10, 25, 252, 52);
 		panel.add(quantityInfo);
 		
 		payInfo = new JLabel("Total Cost: ");
-		payInfo.setBounds(10, 147, 252, 164);
+		payInfo.setBounds(10, 88, 252, 52);
 		panel.add(payInfo);
 		payInfo.setHorizontalAlignment(SwingConstants.LEFT);
-		payInfo.setFont(new Font("Verdana", Font.BOLD, 20));
+		payInfo.setFont(new Font("Verdana", Font.PLAIN, 16));
 		payInfo.setBackground(Color.WHITE);
+		
+		btnLogOut = new JButton("Log Out");
+		btnLogOut.setBackground(UIManager.getColor("Button.background"));
+		btnLogOut.addActionListener(this);
+		btnLogOut.setFont(new Font("Verdana", Font.PLAIN, 11));
+		btnLogOut.setBounds(662, 21, 272, 120);
+		Overall.add(btnLogOut);
 		
 		Menu = new JPanel();
 		Menu.setBorder(new TitledBorder(null, "Menu Screen", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -291,32 +305,68 @@ public class CustomerGUI extends JFrame implements ActionListener {
 			dessertsTab.add(desbuttons[i]);
 		}
 	}
-
-	
-	private void removeOrder(int index) {
-		patron.Remove_Order(index);
-		updateTableData();
-	}
 	private void pay() {
 		
 	}
+	private void logOut() {
+		new LoginWindow();
+		dispose();
+	}
 	private void placeOrder() {
-		
+		DefaultTableModel dft = (DefaultTableModel) tableOfOrders.getModel();
+		for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
+			dft.removeRow(0);
+		}
+		KitchenStaffHandler.addTableOrder(patron.Place_Order());
+		quantityInfo.setText("Total Quantity: ");
+		payInfo.setText("Total Cost: ");
+		repaint();
+	}
+	private void removeOrder(int row) {
+		try {
+			if(patron.TOTAL_QUANTITY > 0) {
+				DefaultTableModel dft = (DefaultTableModel) tableOfOrders.getModel();
+				Vector data = dft.getDataVector();
+				String t = data.elementAt(row).toString();
+				boolean gone = patron.Remove_Order(Character.getNumericValue(t.charAt(1)));
+				NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
+				String w = nf.format(patron.TOTAL_COST);
+				quantityInfo.setText("Total Quantity: " + patron.TOTAL_QUANTITY);
+				payInfo.setText("Total Cost: " + w);
+				if(gone) {
+					dft.removeRow(row);
+				} else {
+					for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
+						tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.MENU_ID, i, 0);
+						tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.STRING_ID, i, 1);
+						tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.PRICE, i, 2);
+						tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity, i, 3);
+						tableOfOrders.setValueAt("", i, 4);
+						tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE, i, 5);
+						
+					}
+				}
+			}
+		} catch (Exception e1) {
+			
+		}
 	}
 	private void addOrder(int code) {
 		MenuItem temp = new MenuItem(code);
 		Order temp2 = new Order(code, 1, temp.STRING_ID, 0);
 		temp2.Order_ID = orderNumber;
 		patron.Add_Order(temp2);
-		tableOfOrders.setValueAt(orderNumber, orderCount, 0);
-		tableOfOrders.setValueAt(temp.STRING_ID, orderCount, 1);
-		tableOfOrders.setValueAt(temp.PRICE, orderCount, 2);
-		tableOfOrders.setValueAt(1, orderCount, 3);
-		tableOfOrders.setValueAt("", orderCount, 4);
-		tableOfOrders.setValueAt(temp.PRICE * 1, orderCount, 5);
+		for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
+			tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.MENU_ID, i, 0);
+			tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.STRING_ID, i, 1);
+			tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.PRICE, i, 2);
+			tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity, i, 3);
+			tableOfOrders.setValueAt("", i, 4);
+			tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE, i, 5);
+		}
 		NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
 		String w = nf.format(patron.TOTAL_COST);
-		quantityInfo.setText("Total Quantity: " + orderCount);
+		quantityInfo.setText("Total Quantity: " + patron.TOTAL_QUANTITY);
 		payInfo.setText("Total Cost: " + w);
 		repaint();
 		orderCount++;
@@ -360,12 +410,6 @@ public class CustomerGUI extends JFrame implements ActionListener {
 			}
 		}
 	}
-	private void updateTableData() {
-		
-	}
-	class Menu extends JFrame {
-		
-	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		int row = tableOfOrders.getSelectedRow();
@@ -378,22 +422,13 @@ public class CustomerGUI extends JFrame implements ActionListener {
 			Menu.setVisible(false);
 		}
 		if(e.getSource() == buttonRemoveOrder) {
-			try {
-				if(orderNumber > 1) {
-					DefaultTableModel dft = (DefaultTableModel) tableOfOrders.getModel();
-					Vector data = dft.getDataVector();
-					String t = data.elementAt(row).toString();
-					patron.Remove_Order(Character.getNumericValue(t.charAt(1)));
-					NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
-					String w = nf.format(patron.TOTAL_COST);
-					quantityInfo.setText("Total Quantity: " + orderCount);
-					payInfo.setText("Total Cost: " + w);
-					dft.removeRow(row);
-					orderCount--;
-				}
-			} catch (Exception e1) {
-				
-			}
+			removeOrder(row);
+		}
+		if(e.getSource() == ButtonPlaceOrder) {
+			placeOrder();
+		}
+		if(e.getSource() == btnLogOut) {
+			logOut();
 		}
 		checkMenuItemButtons(e);
 	}
