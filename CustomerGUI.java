@@ -70,10 +70,10 @@ public class CustomerGUI extends JFrame implements ActionListener {
 	private JPanel dessertsTab;
 	private JTabbedPane tabbedPane;
 	private JButton bApp4;
-	private JButton[] appbuttons;
-	private JButton[] dributtons;
-	private JButton[] entbuttons;
-	private JButton[] desbuttons;
+	private JPlusButton[] appbuttons;
+	private JPlusButton[] dributtons;
+	private JPlusButton[] entbuttons;
+	private JPlusButton[] desbuttons;
 	private MenuItem[] appitems;
 	private MenuItem[] driitems;
 	private MenuItem[] entitems;
@@ -81,7 +81,6 @@ public class CustomerGUI extends JFrame implements ActionListener {
 	private int orderNumber = 0;
 	private int orderCount = 0;
 	private JButton btnLogOut;
-	
 	public CustomerGUI() {
 		addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -248,13 +247,13 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		tabbedPane.addTab("Appetizers", null, appetizerTab, null);
 		appetizerTab.setLayout(null);
 		
-		appbuttons = new JButton[1];
+		appbuttons = new JPlusButton[1];
 		appitems = new MenuItem[1];
 		appitems[0] = new MenuItem(5);
 		for(int i = 0; i < 1; i++) {
-			appbuttons[i] = new JButton();
+			appbuttons[i] = new JPlusButton(appitems[i].MENU_ID);
 			appbuttons[i].addActionListener(this);
-			appbuttons[i].setText(appitems[i].STRING_ID + " " + appitems[i].MENU_ID);
+			appbuttons[i].setText(appitems[i].STRING_ID);
 			appbuttons[i].setBounds(10 + (164 * i), 11, 164, 64);
 			appetizerTab.add(appbuttons[i]);
 		}
@@ -263,13 +262,13 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		drinksTab.setLayout(null);
 		tabbedPane.addTab("Drinks", null, drinksTab, null);
 		
-		dributtons = new JButton[1];
+		dributtons = new JPlusButton[1];
 		driitems = new MenuItem[1];
 		driitems[0] = new MenuItem(4);
 		for(int i = 0; i < 1; i++) {
-			dributtons[i] = new JButton();
+			dributtons[i] = new JPlusButton(driitems[i].MENU_ID);
 			dributtons[i].addActionListener(this);
-			dributtons[i].setText(driitems[i].STRING_ID + " " + driitems[i].MENU_ID);
+			dributtons[i].setText(driitems[i].STRING_ID);
 			dributtons[i].setBounds(10 + (164 * i), 11, 164, 64);
 			drinksTab.add(dributtons[i]);
 		}
@@ -278,14 +277,14 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		entreesTab.setLayout(null);
 		tabbedPane.addTab("Entrees", null, entreesTab, null);
 		
-		entbuttons = new JButton[2];
+		entbuttons = new JPlusButton[2];
 		entitems = new MenuItem[2];
 		entitems[0] = new MenuItem(1);
 		entitems[1] = new MenuItem(2);
 		for(int i = 0; i < 2; i++) {
-			entbuttons[i] = new JButton();
+			entbuttons[i] = new JPlusButton(entitems[i].MENU_ID);
 			entbuttons[i].addActionListener(this);
-			entbuttons[i].setText(entitems[i].STRING_ID + " " + entitems[i].MENU_ID);
+			entbuttons[i].setText(entitems[i].STRING_ID);
 			entbuttons[i].setBounds(10 + (174 * i), 11, 164, 64);
 			entreesTab.add(entbuttons[i]);
 		}
@@ -294,14 +293,14 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		dessertsTab.setLayout(null);
 		tabbedPane.addTab("Desserts", null, dessertsTab, null);
 		
-		desbuttons = new JButton[2];
+		desbuttons = new JPlusButton[2];
 		desitems = new MenuItem[2];
 		desitems[0] = new MenuItem(3);
 		desitems[1] = new MenuItem(6);
 		for(int i = 0; i < 2; i++) {
-			desbuttons[i] = new JButton();
+			desbuttons[i] = new JPlusButton(desitems[i].MENU_ID);
 			desbuttons[i].addActionListener(this);
-			desbuttons[i].setText(desitems[i].STRING_ID + " " + desitems[i].MENU_ID);
+			desbuttons[i].setText(desitems[i].STRING_ID);
 			desbuttons[i].setBounds(10 + (174 * i), 11, 164, 64);
 			dessertsTab.add(desbuttons[i]);
 		}
@@ -356,7 +355,7 @@ public class CustomerGUI extends JFrame implements ActionListener {
 	}
 	private void addOrder(int code) {
 		MenuItem temp = new MenuItem(code);
-		Order temp2 = new Order(code, 1, temp.STRING_ID, 0);
+		Order temp2 = new Order(code, 1, "", 0);
 		temp2.Order_ID = orderNumber;
 		patron.Add_Order(temp2);
 		for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
@@ -382,33 +381,25 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		}
 		for(int i = 0; i < appbuttons.length; i++) {
 			if(s.equals(appbuttons[i])) {
-				String text = appbuttons[i].getText();
-				text = text.substring(text.length() - 1, text.length());
-				int code = Integer.parseInt(text);
+				int code = appbuttons[i].id;
 				addOrder(code);
 			}
 		}
 		for(int i = 0; i < dributtons.length; i++) {
 			if(s.equals(dributtons[i])) {
-				String text = dributtons[i].getText();
-				text = text.substring(text.length() - 1, text.length());
-				int code = Integer.parseInt(text);
+				int code = dributtons[i].id;
 				addOrder(code);
 			}
 		}
 		for(int i = 0; i < entbuttons.length; i++) {
 			if(s.equals(entbuttons[i])) {
-				String text = entbuttons[i].getText();
-				text = text.substring(text.length() - 1, text.length());
-				int code = Integer.parseInt(text);
+				int code = entbuttons[i].id;
 				addOrder(code);
 			}
 		}
 		for(int i = 0; i < desbuttons.length; i++) {
 			if(s.equals(desbuttons[i])) {
-				String text = desbuttons[i].getText();
-				text = text.substring(text.length() - 1, text.length());
-				int code = Integer.parseInt(text);
+				int code = desbuttons[i].id;
 				addOrder(code);
 			}
 		}
@@ -434,5 +425,11 @@ public class CustomerGUI extends JFrame implements ActionListener {
 			logOut();
 		}
 		checkMenuItemButtons(e);
+	}
+	public class JPlusButton extends JButton {
+		public int id;
+		public JPlusButton(int id) {
+			this.id = id;
+		}
 	}
 }
