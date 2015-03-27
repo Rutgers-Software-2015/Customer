@@ -20,6 +20,7 @@ import java.awt.Font;
 
 import javax.swing.JPanel;
 
+import ADT.Employee;
 import ADT.MenuItem;
 import ADT.Order;
 import ADT.TableOrder;
@@ -317,7 +318,9 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
 			dft.removeRow(0);
 		}
-		KitchenStaffHandler.addTableOrder(patron.Place_Order());
+		Employee emp=new Employee();
+		TableOrder test=new TableOrder(patron.TOTAL_ORDERS,emp,6);
+		KitchenStaffHandler.addTableOrder(test);
 		quantityInfo.setText("Total Quantity: ");
 		payInfo.setText("Total Cost: ");
 		repaint();
