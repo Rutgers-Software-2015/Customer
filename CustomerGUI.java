@@ -1,55 +1,47 @@
 package Customer;
 
 import javax.swing.JFrame;
-
 import java.awt.CardLayout;
-
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.JScrollPane;
-
 import java.awt.Color;
-
 import javax.swing.JLabel;
-
 import java.awt.Font;
-
 import javax.swing.JPanel;
-
 import ADT.Employee;
 import ADT.MenuItem;
 import ADT.Order;
 import ADT.TableOrder;
 import KitchenStaff.KitchenStaffHandler;
 import Login.LoginWindow;
-
-import javax.swing.border.BevelBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.JTabbedPane;
-import javax.swing.BoxLayout;
-
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.Vector;
-
 import javax.swing.UIManager;
 import javax.swing.ListSelectionModel;
 
+/**
+ * This file contains all functions necessary to generate the main GUI for the customer.
+ * It contains two classes, CustomerGUI, and an inner class JPlusButton. These are both
+ * necessary in order to provide a comfortable interface for the user.
+ * 
+ * @author Robert Schultz
+ *
+ */
 public class CustomerGUI extends JFrame implements ActionListener {
-
+	
 	/*
-	public static void main(String[] args) {
-		new CustomerGUI();
-	}
-	*/
-	private boolean done = false;
+	 * Below are all the fields and variables necessary to the Graphical User
+	 * Interface. All J-types are java swing components that may correspond to
+	 * buttons, fields, panes, or tables.
+	 */
+	private static final long serialVersionUID = 1L;
 	private JButton buttonAddOrder;
 	private JButton buttonRemoveOrder;
 	private JButton ButtonPlaceOrder;
@@ -69,7 +61,6 @@ public class CustomerGUI extends JFrame implements ActionListener {
 	private JPanel entreesTab;
 	private JPanel dessertsTab;
 	private JTabbedPane tabbedPane;
-	private JButton bApp4;
 	private JPlusButton[] appbuttons;
 	private JPlusButton[] dributtons;
 	private JPlusButton[] entbuttons;
@@ -79,8 +70,12 @@ public class CustomerGUI extends JFrame implements ActionListener {
 	private MenuItem[] entitems;
 	private MenuItem[] desitems;
 	private int orderNumber = 0;
-	private int orderCount = 0;
 	private JButton btnLogOut;
+	
+	/*
+	 * Constructor for a new CustomerGUI. This sets and orients the window for the customer.
+	 * In order to display a GUI, all components are added before the frame is visible
+	 */
 	public CustomerGUI() {
 		addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -242,6 +237,13 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		setTabButtons();
 		this.setVisible(true);
 	}
+	
+	/*
+	 * This function sets all the tabs in the menu display, it is currently hard-coded to have 4 types
+	 * of menu options, appetizer, drinks, entrees, and desserts.
+	 * @param: none
+	 * @return: none
+	 */
 	private void setTabButtons() {
 		appetizerTab = new JPanel();
 		tabbedPane.addTab("Appetizers", null, appetizerTab, null);
@@ -305,13 +307,24 @@ public class CustomerGUI extends JFrame implements ActionListener {
 			dessertsTab.add(desbuttons[i]);
 		}
 	}
-	private void pay() {
-		
-	}
+	
+	/*
+	 * This function calls for another LoginWindow, and disposes of the current window. It is called
+	 * when the user presses the log out button.
+	 * @param: none
+	 * @return: This frame is closed.
+	 */
 	private void logOut() {
 		new LoginWindow();
 		dispose();
 	}
+	
+	/*
+	 * This function takes the complete set of all orders and sends the order to the Kitchen Staff. It
+	 * also clears the current orders from the table of the user.
+	 * @param: none
+	 * @return: Order table is cleared, and all orders sent to Kitchen Staff.
+	 */
 	private void placeOrder() {
 		DefaultTableModel dft = (DefaultTableModel) tableOfOrders.getModel();
 		for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
@@ -324,6 +337,12 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		payInfo.setText("Total Cost: ");
 		repaint();
 	}
+	
+	/*
+	 * This function removes a row from the order queue, and from the table on the customer interface.
+	 * @param: [int row] specifies which row to delete.
+	 * @return: A new table is updated to the user and the order is removed from the queue if it exists.
+	 */
 	private void removeOrder(int row) {
 		try {
 			if(patron.TOTAL_QUANTITY > 0) {
@@ -353,6 +372,13 @@ public class CustomerGUI extends JFrame implements ActionListener {
 			
 		}
 	}
+	
+	/*
+	 * This function adds an order to the order queue and updates the table in the customer interface to
+	 * include the new order.
+	 * @param: [int code] specifies which menu item will be added to the queue.
+	 * @return: The order queue and table of orders is updated.
+	 */
 	private void addOrder(int code) {
 		MenuItem temp = new MenuItem(code);
 		Order temp2 = new Order(code, 1, "", 0);
@@ -371,9 +397,15 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		quantityInfo.setText("Total Quantity: " + patron.TOTAL_QUANTITY);
 		payInfo.setText("Total Cost: " + w);
 		repaint();
-		orderCount++;
 		orderNumber++;
 	}
+	
+	/*
+	 * This function checks which menu button has been pressed, and if one has been asserted, then
+	 * addOrder() is called.
+	 * @param: [ActionEvent e] specifies what event happened, and can be checked.
+	 * @return: A call to addOrder() will be asserted if a menu button was pressed.
+	 */
 	private void checkMenuItemButtons(ActionEvent e) {
 		Object s = e.getSource();
 		if(s == null) {
@@ -404,6 +436,12 @@ public class CustomerGUI extends JFrame implements ActionListener {
 			}
 		}
 	}
+	
+	/*
+	 * Every time an action happens to an ActionListener, this function is called.
+	 * @param: [ActionEvent e] specifies what kind of action or event has occurred.
+	 * @return: A function is performed and handled, based on the action.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		int row = tableOfOrders.getSelectedRow();
@@ -426,9 +464,18 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		}
 		checkMenuItemButtons(e);
 	}
+	
+	/*
+	 * This class describes a new JButton that can store an additional field called ID.
+	 */
 	public class JPlusButton extends JButton {
-		public int id;
+		public int id; //Field to represent ID of JPlusButton
+		
+		/*
+		 * Constructor to define JPlusButton.
+		 */
 		public JPlusButton(int id) {
+			super();
 			this.id = id;
 		}
 	}

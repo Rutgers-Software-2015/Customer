@@ -5,8 +5,10 @@ import java.util.Queue;
 import ADT.*;
 
 /**
+ * This file contains the class CustomerHandler. This class is responsible for handling all high level operations, 
+ * for the customer.
  * 
- * @author Bolt
+ * @author Robert Schultz
  *
  */
 
@@ -18,23 +20,31 @@ public class CustomerHandler {
 	public double TOTAL_COST; //The total cost of all the menu items in TOTAL ORDER.
 	public LinkedList<Order> TOTAL_ORDERS; //Queue of all the orders placed by the customer.
 	public boolean TABLE_OCCUPANCY; //TRUE if there is at least one customer as this table, and FALSE if the table is vacant.
-	public int TOTAL_QUANTITY;
-	public Employee waiter;
+	public int TOTAL_QUANTITY; //Total amount of orders in TOTAL_ORDERS
+	public Employee waiter; //Employee currently serving this customer
 	
+	/*
+	 * Constructor to create a new CustomerHandler, with a specific table.
+	 */
 	public CustomerHandler(int TABLE_ID) {
 		this.TABLE_ID = TABLE_ID;
 		TOTAL_ORDERS = new LinkedList<Order>();
 		TOTAL_QUANTITY = 0;
 	}
 	
+	/*
+	 * Sets the number of customers at the table.
+	 * @param: [int n] specifies how many customers to set.
+	 * @return: The number of customers is updated.
+	 */
 	public void setNumberCustomers(int n) {
 		this.CUSTOMER_COUNT = n;
 	}
 	
 	/*
-	 * This creates an Order object given 3 parameters, 
-	 * and returns it the system.
-	 * 
+	 * This creates a complete TableOrder object.
+	 * @param: none
+	 * @return: [TableOrder] defined by value inside class.
 	 */
 	public TableOrder Place_Order() {
 		/*
@@ -49,7 +59,9 @@ public class CustomerHandler {
 	
 	/*
 	 * This function adds an order to the TOTAL ORDER queue, 
-	 * and updates the TOTAL COST field. Returns TRUE if successful.
+	 * and updates the TOTAL COST field.
+	 * @param: [Order n] specifies what order to add to the queue
+	 * @return: [boolean] specifies whether an order was successfully added.
 	 */
 	public boolean Add_Order(Order n) {
 		boolean inside = false;
@@ -70,6 +82,11 @@ public class CustomerHandler {
 		return false;
 	}
 	
+	/*
+	 * This function periodically updates the TOTAL_QUANTITY of the TOTAL_ORDER
+	 * @param: none
+	 * @return: TOTAL_QUANTITY is updated.
+	 */
 	private void updateCount() {
 		TOTAL_QUANTITY = 0;
 		for(int i = 0; i < TOTAL_ORDERS.size(); i++){
@@ -79,7 +96,9 @@ public class CustomerHandler {
 
 	/*
 	 * This function removes a certain Order from the TOTAL ORDER queue, 
-	 * and readjusts the TOTAL COST field. Returns TRUE if successful.
+	 * and readjusts the TOTAL COST field.
+	 * @param: [int MENU_ID] specifies which item to add to order.
+	 * @return: [boolean] specifies whether the target was removed.
 	 */
 	public boolean Remove_Order(int MENU_ID) {
 		Order temp;
