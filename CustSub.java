@@ -61,7 +61,7 @@ public class CustSub extends JFrame implements ActionListener{
 		private GradientPanel backgroundPanel,buttonPanelBackground,cardPanel;
 		private GradientPanel card1,card3;
 		//Swing Objects
-		private GradientButton backButton,bToggleMenu,bToggleAR,bPlaceOrder,bPayOrder;
+		private GradientButton backButton,bCallWaiter,bToggleAR,bPlaceOrder,bPayOrder;
 		private GradientButton payWithCash,payWithCard;
 		private JLabel titleLabel,dateAndTime;
 		//Swing Layouts
@@ -71,9 +71,9 @@ public class CustSub extends JFrame implements ActionListener{
 		private CustomerHandler patron;
 		private JTable tableOfOrders;
 		private JScrollPane scrollPane;
-		private JScrollPane scrollPane_1;
-		private JPanel panel;
 		private ArrayList<GradientButton> menuButtons;
+		private JPanel panel;
+		private JScrollPane scrollPane_1;
 		
 		public static void main(String[] args) {
 			// TODO Auto-generated method stub
@@ -122,7 +122,7 @@ public class CustSub extends JFrame implements ActionListener{
 			scrollPane = new JScrollPane();
 			scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			scrollPane.setBounds(10, 21, 874, 535);
+			scrollPane.setBounds(10, 21, 438, 535);
 			card3.add(scrollPane);
 			
 			tableOfOrders = new JTable();
@@ -222,6 +222,20 @@ public class CustSub extends JFrame implements ActionListener{
 			tableOfOrders.getColumnModel().getColumn(5).setResizable(false);
 			tableOfOrders.getColumnModel().getColumn(5).setPreferredWidth(100);
 			scrollPane.setViewportView(tableOfOrders);
+			
+			scrollPane_1 = new JScrollPane();
+			scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			scrollPane_1.setBounds(458, 21, 426, 535);
+			card3.add(scrollPane_1);
+			
+			panel = new JPanel();
+			panel.setBorder(new TitledBorder(null, "Menu View", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			scrollPane_1.setViewportView(panel);
+			panel.setLayout(new GridLayout(3, 4, 12, 12));
+			for(GradientButton a : menuButtons) {
+				panel.add(a);
+			}
 			c.show(cardPanel, "BLANK");
 			this.setVisible(true);
 		}
@@ -312,12 +326,12 @@ public class CustSub extends JFrame implements ActionListener{
 			buttonPanel.setLayout(new GridLayout(5, 0, 5, 5));
 			
 			// Set Request Table Status Change Button
-			bToggleMenu = new GradientButton("<html>Request Table<br />Status Change</html>");
-			bToggleMenu.setText("Check Menu");
-			bToggleMenu.addActionListener(this);
-			bToggleMenu.setFont(bToggleMenu.getFont().deriveFont(16.0f));
-			bToggleMenu.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-			bToggleMenu.setFocusPainted(false);
+			bCallWaiter = new GradientButton("<html>Request Table<br />Status Change</html>");
+			bCallWaiter.setText("Call Waiter");
+			bCallWaiter.addActionListener(this);
+			bCallWaiter.setFont(bCallWaiter.getFont().deriveFont(16.0f));
+			bCallWaiter.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+			bCallWaiter.setFocusPainted(false);
 			
 			// Set Manage Order Queue Button
 			bToggleAR = new GradientButton("Manage Order Queue");
@@ -351,7 +365,7 @@ public class CustSub extends JFrame implements ActionListener{
 			backButton.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 			backButton.setFocusPainted(false);
 			
-			buttonPanel.add(bToggleMenu);
+			buttonPanel.add(bCallWaiter);
 			buttonPanel.add(bToggleAR);
 			buttonPanel.add(bPlaceOrder);
 			buttonPanel.add(bPayOrder);
@@ -376,29 +390,20 @@ public class CustSub extends JFrame implements ActionListener{
 			
 			cardPanel.add(card1,"YES");
 			card1.setLayout(new GridLayout(0, 1, 0, 0));
-			
-			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			card1.add(scrollPane_1);
-			
-			panel = new JPanel();
-			scrollPane_1.setViewportView(panel);
-			panel.setLayout(new GridLayout(3, 4, 12, 12));
 		
-			for(int a = 0; a < 10; a++) {
+			for(int a = 0; a < 6; a++) {
 				MenuItem temp = new MenuItem(1);
-				if(a > 0 && a < 7) {
-					temp = new MenuItem(a);
-					patron.items.add(new MenuItem(a));
+				if(a + 1 > 0 && a + 1 < 7) {
+					temp = new MenuItem(a + 1);
+					patron.items.add(new MenuItem(a+1));
 					System.out.println("Added?" + a);
 				} else {
 					temp = new MenuItem(1);
 				}
-				menuButtons.add(new GradientButton(temp.STRING_ID));
+				menuButtons.add(new GradientButton(temp.STRING_ID + ": $" + temp.PRICE));
 				menuButtons.get(a).setFont(new Font("Tahoma", Font.PLAIN, 16));
 				menuButtons.get(a).addActionListener(this);
-				panel.add(menuButtons.get(a));
+				
 			}
 			cardPanel.setVisible(true);
 		}
@@ -455,7 +460,6 @@ public class CustSub extends JFrame implements ActionListener{
 			Order temp2 = new Order(code, 1, "", 0);
 			temp2.Order_ID = 0;
 			patron.Add_Order(temp2);
-			System.out.println(code);
 			for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
 				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.MENU_ID, i, 0);
 				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.STRING_ID, i, 1);
@@ -472,33 +476,25 @@ public class CustSub extends JFrame implements ActionListener{
 		public void actionPerformed(ActionEvent e) 
 		{
 			Object a = e.getSource();
-			if(patron.TOTAL_ORDERS.isEmpty()) {
-	    		bToggleAR.setVisible(false);
-	    		bPlaceOrder.setVisible(false);
-	    	}
+			try {
+				if(patron.TOTAL_ORDERS.isEmpty()) {
+					bToggleAR.setVisible(false);
+					bPlaceOrder.setVisible(false);
+				} else {
+					bToggleAR.setVisible(true);
+		    		bPlaceOrder.setVisible(true);
+				}
+			} catch(NullPointerException b) {
+				
+			}
 			if(a == backButton)
 				{
 					new LoginWindow();
 					dispose();
 				}
-			if(a == bToggleMenu)
+			if(a == bCallWaiter)
 			{
-			    if(bToggleMenu.getText().equals("Check Menu")) {
-			    	bToggleMenu.setText("Check Orders");
-			    	bPlaceOrder.setVisible(false);
-			    	bPayOrder.setVisible(false);
-			    	bToggleAR.setVisible(false);
-			    	c.show(cardPanel, "YES"); //Example of how to show card panel
-			    } else {
-			    	bToggleMenu.setText("Check Menu");
-			    	bPayOrder.setVisible(true);
-			    	bToggleAR.setVisible(false);
-			    	if(!patron.TOTAL_ORDERS.isEmpty()) {
-			    		bToggleAR.setVisible(true);
-			    		bPlaceOrder.setVisible(true);
-			    	}
-			    	c.show(cardPanel, "BLANK"); //Example of how to show card panel
-			    }
+			    
 			}
 			if(a == bPlaceOrder)
 				{
@@ -533,7 +529,15 @@ public class CustSub extends JFrame implements ActionListener{
 			if(menuButtons != null) {
 				for(int i = 0; i < menuButtons.size(); i++) {
 					if(a == menuButtons.get(i)) {
-						addOrder(menuButtons.get(i).getText());
+						String a1 = menuButtons.get(i).getText();
+						for(int j = 0; j < menuButtons.get(i).getText().length(); j++) {
+							if(a1.charAt(j) == ':') {
+								a1 = a1.substring(0, j);
+								break;
+							}
+						}
+						addOrder(a1);
+						tableOfOrders.repaint();
 					}
 				}
 			}
