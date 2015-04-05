@@ -1,8 +1,12 @@
 package Customer;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import ADT.*;
+import Shared.ADT.Employee;
+import Shared.ADT.MenuItem;
+import Shared.ADT.Order;
+import Shared.ADT.TableOrder;
 
 /**
  * This file contains the class CustomerHandler. This class is responsible for handling all high level operations, 
@@ -18,18 +22,22 @@ public class CustomerHandler {
 	public int CUSTOMER_COUNT; //The amount of customers sitting at the table.
 	public int TABLE_STATUS; //Current status of the table. 
 	public double TOTAL_COST; //The total cost of all the menu items in TOTAL ORDER.
+	public LinkedList<TableOrder> historyTable;
 	public LinkedList<Order> TOTAL_ORDERS; //Queue of all the orders placed by the customer.
 	public boolean TABLE_OCCUPANCY; //TRUE if there is at least one customer as this table, and FALSE if the table is vacant.
 	public int TOTAL_QUANTITY; //Total amount of orders in TOTAL_ORDERS
 	public Employee waiter; //Employee currently serving this customer
+	public ArrayList<MenuItem> items;
 	
 	/*
 	 * Constructor to create a new CustomerHandler, with a specific table.
 	 */
 	public CustomerHandler(int TABLE_ID) {
 		this.TABLE_ID = TABLE_ID;
+		historyTable = new LinkedList<TableOrder>();
 		TOTAL_ORDERS = new LinkedList<Order>();
 		TOTAL_QUANTITY = 0;
+		items = new ArrayList<MenuItem>();
 	}
 	
 	/*
@@ -120,6 +128,12 @@ public class CustomerHandler {
 			}
 		}
 		return found;
+	}
+	
+	public void removeAll() {
+		TOTAL_ORDERS.clear();
+		TOTAL_COST = 0;
+		TOTAL_QUANTITY = 0;
 	}
 	
 	/*

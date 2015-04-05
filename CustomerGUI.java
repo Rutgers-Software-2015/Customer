@@ -1,28 +1,39 @@
 package Customer;
 
 import javax.swing.JFrame;
+
 import java.awt.CardLayout;
+
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
+
 import java.awt.Color;
+
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.JPanel;
-import ADT.Employee;
-import ADT.MenuItem;
-import ADT.Order;
-import ADT.TableOrder;
+
+import Shared.*;
+import Shared.ADT.Employee;
+import Shared.ADT.MenuItem;
+import Shared.ADT.Order;
+import Shared.ADT.TableOrder;
 import KitchenStaff.KitchenStaffHandler;
 import Login.LoginWindow;
+
 import javax.swing.JTabbedPane;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.Vector;
+
 import javax.swing.UIManager;
 import javax.swing.ListSelectionModel;
 
@@ -332,7 +343,6 @@ public class CustomerGUI extends JFrame implements ActionListener {
 		}
 		Employee emp=new Employee();
 		TableOrder test=new TableOrder(patron.TOTAL_ORDERS,emp,6);
-		KitchenStaffHandler.addTableOrder(test);
 		quantityInfo.setText("Total Quantity: ");
 		payInfo.setText("Total Cost: ");
 		repaint();
