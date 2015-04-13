@@ -75,9 +75,9 @@ public class CustSub extends JFrame implements ActionListener{
 		private ArrayList<GradientButton> menuButtons;
 		private JPanel panel;
 		private JScrollPane scrollPane_1;
+		private JLabel lTotal;
 		private JLabel lCost;
-		private GradientButton bHelp;
-		private JPanel panel_1;
+		private JButton bHelp;
 		
 		public static void main(String[] args) {
 			// TODO Auto-generated method stub
@@ -133,7 +133,7 @@ public class CustSub extends JFrame implements ActionListener{
 			tableOfOrders.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			tableOfOrders.setShowGrid(false);
 			tableOfOrders.setShowHorizontalLines(false);
-			tableOfOrders.setFont(new Font("Tahoma", Font.PLAIN, 20));
+			tableOfOrders.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 			tableOfOrders.setShowVerticalLines(false);
 			tableOfOrders.setRowHeight(32);
 			tableOfOrders.setModel(new DefaultTableModel(
@@ -239,7 +239,7 @@ public class CustSub extends JFrame implements ActionListener{
 			scrollPane_1.setViewportView(panel);
 			panel.setLayout(new GridLayout(3, 4, 12, 12));
 			
-			bHelp = new GradientButton("Need Help?");
+			bHelp = new JButton("Need Help?");
 			bHelp.addActionListener(this);
 			bHelp.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			bHelp.addActionListener(new ActionListener() {
@@ -249,17 +249,16 @@ public class CustSub extends JFrame implements ActionListener{
 			bHelp.setBounds(10, 468, 178, 88);
 			card3.add(bHelp);
 			
-			panel_1 = new JPanel();
-			panel_1.setBorder(new TitledBorder(null, "Total", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel_1.setBounds(198, 468, 315, 88);
-			card3.add(panel_1);
-			panel_1.setLayout(null);
+			lTotal = new JLabel("Total: ");
+			lTotal.setHorizontalAlignment(SwingConstants.CENTER);
+			lTotal.setBounds(198, 468, 63, 32);
+			card3.add(lTotal);
 			
-			lCost = new JLabel("$0.00");
-			lCost.setBounds(0, 0, 315, 88);
-			panel_1.add(lCost);
+			lCost = new JLabel("$    ");
 			lCost.setFont(new Font("Tahoma", Font.PLAIN, 48));
-			lCost.setHorizontalAlignment(SwingConstants.CENTER);
+			lCost.setHorizontalAlignment(SwingConstants.LEFT);
+			lCost.setBounds(271, 468, 242, 88);
+			card3.add(lCost);
 			for(GradientButton a : menuButtons) {
 				panel.add(a);
 			}
@@ -377,14 +376,6 @@ public class CustSub extends JFrame implements ActionListener{
 			bPlaceOrder.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 			bPlaceOrder.setFocusPainted(false);
 			bPlaceOrder.setVisible(false);
-			// Set Back Button
-			backButton = new GradientButton("BACK");
-			backButton.addActionListener(this);												
-			backButton.setFont(backButton.getFont().deriveFont(16.0f));
-			backButton.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-			backButton.setFocusPainted(false);
-			
-			buttonPanel.add(bCallWaiter);
 			
 			// Set Request Refund Button
 			bPayOrder = new GradientButton("Request Refund");
@@ -393,9 +384,17 @@ public class CustSub extends JFrame implements ActionListener{
 			bPayOrder.setFont(bPayOrder.getFont().deriveFont(16.0f));
 			bPayOrder.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 			bPayOrder.setFocusPainted(false);
-			buttonPanel.add(bPayOrder);
+			// Set Back Button
+			backButton = new GradientButton("BACK");
+			backButton.addActionListener(this);												
+			backButton.setFont(backButton.getFont().deriveFont(16.0f));
+			backButton.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+			backButton.setFocusPainted(false);
+			
+			buttonPanel.add(bCallWaiter);
 			buttonPanel.add(bToggleAR);
 			buttonPanel.add(bPlaceOrder);
+			buttonPanel.add(bPayOrder);
 			buttonPanel.add(backButton);
 		}
 		
@@ -490,8 +489,6 @@ public class CustSub extends JFrame implements ActionListener{
 			TableOrder current = new TableOrder(patron.TOTAL_ORDERS, new Employee(), 0);
 			patron.historyTable.add(current);
 			patron.removeAll();
-			NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
-			lCost.setText(nf.format(patron.TOTAL_COST));
 			repaint();
 		}
 		
@@ -539,22 +536,15 @@ public class CustSub extends JFrame implements ActionListener{
 				}
 			if(a == bCallWaiter)
 			{
-				String[] options = {"Okay"};
-				JOptionPane.showOptionDialog(new JFrame(), "NOT YET IMPLEMENTED.", 
-					"...", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, 0);
+			    
 			}
 			if(a == bPlaceOrder)
 				{
 					placeOrder();
-					String[] options = {"Okay!"};
-					JOptionPane.showOptionDialog(new JFrame(), "Your Order has been sent to the Kitchen!", 
-						"Order Placed!!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, 0);
 				}
 			if(a == bPayOrder)
 				{
-				String[] options = {"Okay"};
-				JOptionPane.showOptionDialog(new JFrame(), "NOT YET IMPLEMENTED.", 
-					"...", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, 0);
+				
 				}
 			if(a == bToggleAR)
 				{
@@ -565,6 +555,14 @@ public class CustSub extends JFrame implements ActionListener{
 					removeOrder(row);
 					if(patron.TOTAL_ORDERS.isEmpty())
 			    		bToggleAR.setVisible(false);
+				}
+			if(a == payWithCash)
+				{
+
+				}
+			if(a == payWithCard)
+				{
+
 				}
 			if(a == timer)
 				{
@@ -586,10 +584,8 @@ public class CustSub extends JFrame implements ActionListener{
 				}
 			}
 			if(a == bHelp) {
-				String message = "This is an interface that you can use to order food, just simply add items to your order by clicking the item in the menu on the right side.\nWhen you are finished you may press finish order and your food will be delivered.";
-				String[] options = {"Okay!"};
-					JOptionPane.showOptionDialog(new JFrame(), message, 
-						"Need Help?", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, 0);
+				String message = "This is an interface that you can use to order food, \n to order food, simply add items to your order by clicking the item \n in the menu on the right side. When you are finished you may press finish order \n and you food will be delivered.";
+				JOptionPane.showConfirmDialog(new JFrame(), message);
 			}
 		}
 		
