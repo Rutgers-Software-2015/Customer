@@ -46,6 +46,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 import javax.swing.JScrollBar;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 
 
 
@@ -74,6 +75,9 @@ public class CustSub extends JFrame implements ActionListener{
 		private ArrayList<GradientButton> menuButtons;
 		private JPanel panel;
 		private JScrollPane scrollPane_1;
+		private JLabel lTotal;
+		private JLabel lCost;
+		private JButton bHelp;
 		
 		public static void main(String[] args) {
 			// TODO Auto-generated method stub
@@ -122,117 +126,139 @@ public class CustSub extends JFrame implements ActionListener{
 			scrollPane = new JScrollPane();
 			scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			scrollPane.setBounds(10, 21, 438, 535);
+			scrollPane.setBounds(10, 21, 503, 436);
 			card3.add(scrollPane);
 			
 			tableOfOrders = new JTable();
 			tableOfOrders.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			tableOfOrders.setShowGrid(false);
 			tableOfOrders.setShowHorizontalLines(false);
-			tableOfOrders.setFont(new Font("SansSerif", Font.PLAIN, 12));
+			tableOfOrders.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 			tableOfOrders.setShowVerticalLines(false);
-			tableOfOrders.setColumnSelectionAllowed(true);
+			tableOfOrders.setRowHeight(32);
 			tableOfOrders.setModel(new DefaultTableModel(
 				new Object[][] {
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
-					{null, null, null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
+					{null, null, null, null},
 				},
 				new String[] {
-					"#", "Menu Item", "Cost", "Quantity", "Special Requests", "Total Cost"
+					"Menu Item", "Cost", "Quantity", "Total Cost"
 				}
 			) {
 				Class[] columnTypes = new Class[] {
-					Integer.class, String.class, Object.class, Integer.class, String.class, Object.class
+					String.class, Object.class, Integer.class, Double.class
 				};
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
+				boolean[] columnEditables = new boolean[] {
+					false, false, false, false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
 			});
-			tableOfOrders.getColumnModel().getColumn(0).setPreferredWidth(32);
+			tableOfOrders.getColumnModel().getColumn(0).setResizable(false);
+			tableOfOrders.getColumnModel().getColumn(0).setPreferredWidth(128);
 			tableOfOrders.getColumnModel().getColumn(1).setResizable(false);
-			tableOfOrders.getColumnModel().getColumn(1).setPreferredWidth(128);
+			tableOfOrders.getColumnModel().getColumn(1).setPreferredWidth(80);
 			tableOfOrders.getColumnModel().getColumn(2).setResizable(false);
-			tableOfOrders.getColumnModel().getColumn(2).setPreferredWidth(80);
+			tableOfOrders.getColumnModel().getColumn(2).setPreferredWidth(32);
 			tableOfOrders.getColumnModel().getColumn(3).setResizable(false);
-			tableOfOrders.getColumnModel().getColumn(3).setPreferredWidth(64);
-			tableOfOrders.getColumnModel().getColumn(4).setResizable(false);
-			tableOfOrders.getColumnModel().getColumn(4).setPreferredWidth(256);
-			tableOfOrders.getColumnModel().getColumn(5).setResizable(false);
-			tableOfOrders.getColumnModel().getColumn(5).setPreferredWidth(100);
+			tableOfOrders.getColumnModel().getColumn(3).setPreferredWidth(100);
 			scrollPane.setViewportView(tableOfOrders);
 			
 			scrollPane_1 = new JScrollPane();
 			scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			scrollPane_1.setBounds(458, 21, 426, 535);
+			scrollPane_1.setBounds(523, 21, 361, 535);
 			card3.add(scrollPane_1);
 			
 			panel = new JPanel();
 			panel.setBorder(new TitledBorder(null, "Menu View", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			scrollPane_1.setViewportView(panel);
 			panel.setLayout(new GridLayout(3, 4, 12, 12));
+			
+			bHelp = new JButton("Need Help?");
+			bHelp.addActionListener(this);
+			bHelp.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			bHelp.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				}
+			});
+			bHelp.setBounds(10, 468, 178, 88);
+			card3.add(bHelp);
+			
+			lTotal = new JLabel("Total: ");
+			lTotal.setHorizontalAlignment(SwingConstants.CENTER);
+			lTotal.setBounds(198, 468, 63, 32);
+			card3.add(lTotal);
+			
+			lCost = new JLabel("$    ");
+			lCost.setFont(new Font("Tahoma", Font.PLAIN, 48));
+			lCost.setHorizontalAlignment(SwingConstants.LEFT);
+			lCost.setBounds(271, 468, 242, 88);
+			card3.add(lCost);
 			for(GradientButton a : menuButtons) {
 				panel.add(a);
 			}
@@ -396,7 +422,6 @@ public class CustSub extends JFrame implements ActionListener{
 				if(a + 1 > 0 && a + 1 < 7) {
 					temp = new MenuItem(a + 1);
 					patron.items.add(new MenuItem(a+1));
-					System.out.println("Added?" + a);
 				} else {
 					temp = new MenuItem(1);
 				}
@@ -414,19 +439,38 @@ public class CustSub extends JFrame implements ActionListener{
 					DefaultTableModel dft = (DefaultTableModel) tableOfOrders.getModel();
 					Vector data = dft.getDataVector();
 					String t = data.elementAt(row).toString();
-					boolean gone = patron.Remove_Order(Character.getNumericValue(t.charAt(1)));
+					char[] b = t.toCharArray();
+					int f = 0;
+					int g = 0;
+					int index = -1;
+					for(int i = 0; i < b.length; i++) {
+						if(b[i] == '[') {
+							f = i;
+						} else if(b[i] == ',') {
+							g = i;
+							break;
+						}
+					}
+					t = t.substring(f + 1, g);
+					for(int i = 0; i < patron.items.size(); i++) {
+						if(t.equals(patron.items.get(i).STRING_ID)) {
+							index = i;
+							
+							break;
+						}
+					}
+					boolean gone = patron.Remove_Order(index+1);
 					NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
 					String w = nf.format(patron.TOTAL_COST);
+					lCost.setText(w);
 					if(gone) {
 						dft.removeRow(row);
 					} else {
 						for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
-							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.MENU_ID, i, 0);
-							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.STRING_ID, i, 1);
-							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.PRICE, i, 2);
-							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity, i, 3);
-							tableOfOrders.setValueAt("", i, 4);
-							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE, i, 5);
+							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.STRING_ID, i, 0);
+							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.PRICE, i, 1);
+							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity, i, 2);
+							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE, i, 3);
 							
 						}
 					}
@@ -434,6 +478,7 @@ public class CustSub extends JFrame implements ActionListener{
 			} catch (Exception e1) {
 				
 			}
+			repaint();
 		}
 		
 		public void placeOrder() {
@@ -449,9 +494,7 @@ public class CustSub extends JFrame implements ActionListener{
 		
 		public void addOrder(String name) {
 			int code = 0;
-			System.out.println(patron.items.size());
 			for(MenuItem a : patron.items) {
-				System.out.println(name + " " + a.STRING_ID);
 				if(name.equals(a.STRING_ID)) {
 					code = a.MENU_ID;
 				}
@@ -461,15 +504,14 @@ public class CustSub extends JFrame implements ActionListener{
 			temp2.Order_ID = 0;
 			patron.Add_Order(temp2);
 			for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
-				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.MENU_ID, i, 0);
-				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.STRING_ID, i, 1);
-				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.PRICE, i, 2);
-				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity, i, 3);
-				tableOfOrders.setValueAt("", i, 4);
-				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE, i, 5);
+				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.STRING_ID, i, 0);
+				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.PRICE, i, 1);
+				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity, i, 2);
+				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE, i, 3);
 			}
 			NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
 			String w = nf.format(patron.TOTAL_COST);
+			lCost.setText(w);
 			repaint();
 		}
 		// Action Listener
@@ -540,6 +582,10 @@ public class CustSub extends JFrame implements ActionListener{
 						tableOfOrders.repaint();
 					}
 				}
+			}
+			if(a == bHelp) {
+				String message = "This is an interface that you can use to order food, \n to order food, simply add items to your order by clicking the item \n in the menu on the right side. When you are finished you may press finish order \n and you food will be delivered.";
+				JOptionPane.showConfirmDialog(new JFrame(), message);
 			}
 		}
 		
