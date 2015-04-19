@@ -49,6 +49,7 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 		return items;
 	}
 	public void init() throws SQLException {
+		/*
 		this.connect("admin", "gradMay17");
 		this.tell("use MAINDB;");
 		if(counter == 0) {
@@ -58,15 +59,15 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 				max = qq.getInt("ORDER_ID") > max ? qq.getInt("ORDER_ID") : max;
 			}
 			counter = max;
-		}
+		}*/
 	}
 	public void sendOrderOnline(TableOrder e) {
-		String template ="INSERT INTO TABLE_ORDER (ORDER_ID, TABLE_ID, EMPLOYEE_ID, ITEM_NAME, PRICE, QUANTITY, SPEC_INSTR, CURRENT_STATUS, MENU_ITEM_ID) values (";
+		String template ="INSERT INTO TABLE_ORDER (ORDER_ID, TABLE_ID, EMPLOYEE_ID, ITEM_NAME, PRICE, QUANTITY, SPEC_INSTR, CURRENT_STATUS, MENU_ITEM_ID, SEAT_NUMBER) values (";
 		String command = "" + template;
 		this.connect("admin", "gradMay17");
 		this.tell("use MAINDB;");
 		int size = e.FullTableOrder.size();
-		counter = counter + 1;
+		int n = 0;
 		for(int i = 0; i < size; i++) {
 			Order a = e.FullTableOrder.peek();
 			command += counter + ", ";
@@ -77,10 +78,12 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 			command += a.Quantity + ", ";
 			command += "\"" + a.Spc_Req + "\", ";
 			command += "\"NOT READY\", ";
-			command += a.item.MENU_ID + ")";
+			command += a.item.MENU_ID + ", ";
+			command += n%6 + ")";
 			update(command);
 			command = "" + template;
 			e.FullTableOrder.remove();
+			n++;
 		}
 		disconnect();
 	}
