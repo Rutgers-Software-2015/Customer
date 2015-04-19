@@ -30,6 +30,7 @@ import Login.LoginWindow;
 import Shared.ADT.*;
 import Shared.ADT.MenuItem;
 import Shared.Gradients.*;
+import Shared.Notifications.NotificationBox;
 
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -66,6 +67,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 		private JLabel lCost;
 		private GradientButton bHelp;
 		private JPanel panel_1;
+		private NotificationBox note;
 		
 		public static void main(String[] args) {
 			// TODO Auto-generated method stub
@@ -87,8 +89,9 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			updateMenu = new Timer(5000,this);
 			updateMenu.setRepeats(true);
 			updateMenu.setCoalesce(true);
-            updateMenu.setInitialDelay(0);
+            updateMenu.setInitialDelay(5000);
             updateMenu.start();
+            note = new NotificationBox();
 			this.setTitle("Place Orders");
 			this.setResizable(true);
 			this.setSize(1200,700);
@@ -97,7 +100,6 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			setLocationRelativeTo(null);
 			this.setResizable(false);
 			getContentPane().add(rootPanel);
-			
 			
 			addWindowListener(new WindowAdapter() // To open main window again if you hit the corner "X"
 	        {
@@ -261,6 +263,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 		
 		private void setRootPanel()
 		{
+			rootPanel.add(note);
 			rootPanel.add(titlePanel);
 			rootPanel.add(cardPanel);
 			rootPanel.add(buttonPanel);

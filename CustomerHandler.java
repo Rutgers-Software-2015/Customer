@@ -40,6 +40,12 @@ public class CustomerHandler {
 		TOTAL_ORDERS = new LinkedList<Order>();
 		TOTAL_QUANTITY = 0;
 		items = new ArrayList<MenuItem>();
+		try {
+			net.init();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/*
