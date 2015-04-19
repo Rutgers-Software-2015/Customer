@@ -6,33 +6,24 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.BevelBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import Login.LoginWindow;
@@ -40,12 +31,9 @@ import Shared.ADT.*;
 import Shared.ADT.MenuItem;
 import Shared.Gradients.*;
 
-import javax.swing.ButtonGroup;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
-import javax.swing.JScrollBar;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
 
@@ -63,12 +51,12 @@ public class CustomerGUI extends JFrame implements ActionListener{
 		private GradientPanel card1,card3;
 		//Swing Objects
 		private GradientButton backButton,bCallWaiter,bToggleAR,bPlaceOrder,bPayOrder;
-		private GradientButton payWithCash,payWithCard;
 		private JLabel titleLabel,dateAndTime;
 		//Swing Layouts
 		private CardLayout c;
 		//Other Variables
 		private Timer timer;
+		private Timer updateMenu;
 		private CustomerHandler patron;
 		private JTable tableOfOrders;
 		private JScrollPane scrollPane;
@@ -83,19 +71,24 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			// TODO Auto-generated method stub
 			new CustomerGUI();
 		}
-		
-		
+			
 		public CustomerGUI()
 		{
 			super();
+			
 			init();
 		}
-
 
 		public void init()
 		{
 			menuButtons = new ArrayList<GradientButton>();
 			patron = new CustomerHandler(0);
+			patron.setMenu();
+			updateMenu = new Timer(5000,this);
+			updateMenu.setRepeats(true);
+			updateMenu.setCoalesce(true);
+            updateMenu.setInitialDelay(0);
+            updateMenu.start();
 			this.setTitle("Place Orders");
 			this.setResizable(true);
 			this.setSize(1200,700);
@@ -126,16 +119,16 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			scrollPane = new JScrollPane();
 			scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			scrollPane.setBounds(10, 21, 503, 436);
+			scrollPane.setBounds(10, 21, 441, 436);
 			card3.add(scrollPane);
 			
 			tableOfOrders = new JTable();
 			tableOfOrders.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			tableOfOrders.setShowGrid(false);
 			tableOfOrders.setShowHorizontalLines(false);
-			tableOfOrders.setFont(new Font("Tahoma", Font.PLAIN, 20));
+			tableOfOrders.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			tableOfOrders.setShowVerticalLines(false);
-			tableOfOrders.setRowHeight(32);
+			tableOfOrders.setRowHeight(24);
 			tableOfOrders.setModel(new DefaultTableModel(
 				new Object[][] {
 					{null, null, null, null},
@@ -204,40 +197,28 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				new String[] {
 					"Menu Item", "Cost", "Quantity", "Total Cost"
 				}
-			) {
-				Class[] columnTypes = new Class[] {
-					String.class, Object.class, Integer.class, Double.class
-				};
-				public Class getColumnClass(int columnIndex) {
-					return columnTypes[columnIndex];
-				}
-				boolean[] columnEditables = new boolean[] {
-					false, false, false, false
-				};
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
-			});
+			));
 			tableOfOrders.getColumnModel().getColumn(0).setResizable(false);
 			tableOfOrders.getColumnModel().getColumn(0).setPreferredWidth(128);
 			tableOfOrders.getColumnModel().getColumn(1).setResizable(false);
-			tableOfOrders.getColumnModel().getColumn(1).setPreferredWidth(80);
+			tableOfOrders.getColumnModel().getColumn(1).setPreferredWidth(26);
 			tableOfOrders.getColumnModel().getColumn(2).setResizable(false);
 			tableOfOrders.getColumnModel().getColumn(2).setPreferredWidth(32);
 			tableOfOrders.getColumnModel().getColumn(3).setResizable(false);
-			tableOfOrders.getColumnModel().getColumn(3).setPreferredWidth(100);
+			tableOfOrders.getColumnModel().getColumn(3).setPreferredWidth(32);
+			
 			scrollPane.setViewportView(tableOfOrders);
 			
 			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			scrollPane_1.setBounds(523, 21, 361, 535);
+			scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+			scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+			scrollPane_1.setBounds(461, 21, 423, 535);
 			card3.add(scrollPane_1);
 			
 			panel = new JPanel();
 			panel.setBorder(new TitledBorder(null, "Menu View", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			scrollPane_1.setViewportView(panel);
-			panel.setLayout(new GridLayout(3, 4, 12, 12));
+			panel.setLayout(new GridLayout(0, 4, 0, 0));
 			
 			bHelp = new GradientButton("Need Help?");
 			bHelp.addActionListener(this);
@@ -251,12 +232,12 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			
 			panel_1 = new JPanel();
 			panel_1.setBorder(new TitledBorder(null, "Total", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel_1.setBounds(198, 468, 315, 88);
+			panel_1.setBounds(198, 468, 252, 88);
 			card3.add(panel_1);
 			panel_1.setLayout(null);
 			
 			lCost = new JLabel("$0.00");
-			lCost.setBounds(0, 0, 315, 88);
+			lCost.setBounds(0, 0, 254, 88);
 			panel_1.add(lCost);
 			lCost.setFont(new Font("Tahoma", Font.PLAIN, 48));
 			lCost.setHorizontalAlignment(SwingConstants.CENTER);
@@ -306,7 +287,26 @@ public class CustomerGUI extends JFrame implements ActionListener{
 		//************************************************************
 		//DO NOT edit the following function except for the title name
 		//************************************************************
-		
+		private void pingDatabase() {
+			patron.items = new ArrayList<MenuItem>();
+			patron.setMenu();
+			panel.removeAll();
+			panel.setBorder(new TitledBorder(null, "Menu View", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			scrollPane_1.setViewportView(panel);
+			panel.setLayout(new GridLayout(0, 4, 0, 0));
+			menuButtons.clear();
+			NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
+			for(int i = 0; i < patron.items.size(); i++) {
+				menuButtons.add(new GradientButton("<html><br>" + patron.items.get(i).STRING_ID + ":<br>" + nf.format(patron.items.get(i).PRICE) + "</html>"));
+				menuButtons.get(i).setFont(new Font("Tahoma", Font.PLAIN, 16));
+				menuButtons.get(i).addActionListener(this);
+				
+			}
+			for(GradientButton b : menuButtons) {
+				panel.add(b);
+			}
+			repaint();
+		}
 		private void setTitlePanel()
 		{
 			// Create Title Panel
@@ -417,18 +417,11 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			
 			cardPanel.add(card1,"YES");
 			card1.setLayout(new GridLayout(0, 1, 0, 0));
-		
-			for(int a = 0; a < 6; a++) {
-				MenuItem temp = new MenuItem(1);
-				if(a + 1 > 0 && a + 1 < 7) {
-					temp = new MenuItem(a + 1);
-					patron.items.add(new MenuItem(a+1));
-				} else {
-					temp = new MenuItem(1);
-				}
-				menuButtons.add(new GradientButton(temp.STRING_ID + ": $" + temp.PRICE));
-				menuButtons.get(a).setFont(new Font("Tahoma", Font.PLAIN, 16));
-				menuButtons.get(a).addActionListener(this);
+			NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
+			for(int i = 0; i < patron.items.size(); i++) {
+				menuButtons.add(new GradientButton("<html><br>" + patron.items.get(i).STRING_ID + ":<br>" + nf.format(patron.items.get(i).PRICE) + "</html>"));
+				menuButtons.get(i).setFont(new Font("Tahoma", Font.PLAIN, 16));
+				menuButtons.get(i).addActionListener(this);
 				
 			}
 			cardPanel.setVisible(true);
@@ -438,7 +431,8 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			try {
 				if(patron.TOTAL_QUANTITY > 0) {
 					DefaultTableModel dft = (DefaultTableModel) tableOfOrders.getModel();
-					Vector data = dft.getDataVector();
+					@SuppressWarnings("unchecked")
+					Vector<Object> data = dft.getDataVector();
 					String t = data.elementAt(row).toString();
 					char[] b = t.toCharArray();
 					int f = 0;
@@ -456,7 +450,6 @@ public class CustomerGUI extends JFrame implements ActionListener{
 					for(int i = 0; i < patron.items.size(); i++) {
 						if(t.equals(patron.items.get(i).STRING_ID)) {
 							index = i;
-							
 							break;
 						}
 					}
@@ -469,10 +462,9 @@ public class CustomerGUI extends JFrame implements ActionListener{
 					} else {
 						for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
 							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.STRING_ID, i, 0);
-							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.PRICE, i, 1);
+							tableOfOrders.setValueAt(nf.format(patron.TOTAL_ORDERS.get(i).item.PRICE), i, 1);
 							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity, i, 2);
-							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE, i, 3);
-							
+							tableOfOrders.setValueAt(nf.format(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE), i, 3);
 						}
 					}
 				}
@@ -488,6 +480,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				dft.removeRow(0);
 			}
 			TableOrder current = new TableOrder(patron.TOTAL_ORDERS, new Employee(), 0);
+			patron.net.sendOrderOnline(current);
 			patron.historyTable.add(current);
 			patron.removeAll();
 			NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
@@ -502,18 +495,19 @@ public class CustomerGUI extends JFrame implements ActionListener{
 					code = a.MENU_ID;
 				}
 			}
-			MenuItem temp = new MenuItem(code);
-			Order temp2 = new Order(code, 1, "", 0);
-			temp2.Order_ID = 0;
-			patron.Add_Order(temp2);
-			for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
-				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.STRING_ID, i, 0);
-				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.PRICE, i, 1);
-				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity, i, 2);
-				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE, i, 3);
-			}
+			Order s = new Order(code, 1, "", 0);
+			s.item = patron.items.get(code - 1);
+			s.Order_ID = 0;
+			patron.Add_Order(s);
 			NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
 			String w = nf.format(patron.TOTAL_COST);
+			for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
+				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).item.STRING_ID, i, 0);
+				tableOfOrders.setValueAt(nf.format(patron.TOTAL_ORDERS.get(i).item.PRICE), i, 1);
+				tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity, i, 2);
+				tableOfOrders.setValueAt(nf.format(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE), i, 3);
+			}
+			
 			lCost.setText(w);
 			repaint();
 		}
@@ -570,10 +564,16 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				{
 					updateClock();
 				}
+			if(a == updateMenu) {
+				pingDatabase();
+			}
 			if(menuButtons != null) {
 				for(int i = 0; i < menuButtons.size(); i++) {
 					if(a == menuButtons.get(i)) {
 						String a1 = menuButtons.get(i).getText();
+						a1 = a1.replaceAll("<html>", "");
+						a1 = a1.replaceAll("</html>", "");
+						a1 = a1.replaceAll("<br>", "");
 						for(int j = 0; j < menuButtons.get(i).getText().length(); j++) {
 							if(a1.charAt(j) == ':') {
 								a1 = a1.substring(0, j);

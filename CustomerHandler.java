@@ -1,7 +1,7 @@
 package Customer;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Queue;
 
 import Shared.ADT.Employee;
 import Shared.ADT.MenuItem;
@@ -28,11 +28,13 @@ public class CustomerHandler {
 	public int TOTAL_QUANTITY; //Total amount of orders in TOTAL_ORDERS
 	public Employee waiter; //Employee currently serving this customer
 	public ArrayList<MenuItem> items;
+	public CustomerCommunicator net;
 	
 	/*
 	 * Constructor to create a new CustomerHandler, with a specific table.
 	 */
 	public CustomerHandler(int TABLE_ID) {
+		this.net = new CustomerCommunicator();
 		this.TABLE_ID = TABLE_ID;
 		historyTable = new LinkedList<TableOrder>();
 		TOTAL_ORDERS = new LinkedList<Order>();
@@ -47,6 +49,15 @@ public class CustomerHandler {
 	 */
 	public void setNumberCustomers(int n) {
 		this.CUSTOMER_COUNT = n;
+	}
+	
+	public void setMenu() {
+		try {
+			items = net.readMenu();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/*
@@ -112,10 +123,11 @@ public class CustomerHandler {
 		Order temp;
 		double cost = 0;
 		boolean found = false;
-		LinkedList<Order> other = new LinkedList<Order>();
 		for(int i = 0; i < TOTAL_ORDERS.size(); i++) {
 			temp = TOTAL_ORDERS.get(i);
 			cost = temp.item.PRICE;
+			System.out.print(MENU_ID + " ");
+			System.out.println(temp.item.MENU_ID);
 			if(temp.item.MENU_ID == MENU_ID) {
 				if(temp.Quantity > 1) {
 					temp.Quantity -= 1;
