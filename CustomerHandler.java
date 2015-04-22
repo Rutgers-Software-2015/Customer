@@ -91,7 +91,7 @@ public class CustomerHandler {
 	public boolean Add_Order(Order n) {
 		boolean inside = false;
 		for(int i = 0; i < TOTAL_ORDERS.size(); i++) {
-			if(n.item.MENU_ID == TOTAL_ORDERS.get(i).item.MENU_ID) {
+			if(n.item.MENU_ID == TOTAL_ORDERS.get(i).item.MENU_ID && n.Spc_Req.equals(TOTAL_ORDERS.get(i).Spc_Req)) {
 				TOTAL_ORDERS.get(i).Quantity++;
 				TOTAL_COST += n.item.PRICE;
 				updateCount();
@@ -125,16 +125,14 @@ public class CustomerHandler {
 	 * @param: [int MENU_ID] specifies which item to add to order.
 	 * @return: [boolean] specifies whether the target was removed.
 	 */
-	public boolean Remove_Order(int MENU_ID) {
+	public boolean Remove_Order(String STRING_ID, String s) {
 		Order temp;
 		double cost = 0;
 		boolean found = false;
 		for(int i = 0; i < TOTAL_ORDERS.size(); i++) {
 			temp = TOTAL_ORDERS.get(i);
 			cost = temp.item.PRICE;
-			System.out.print(MENU_ID + " ");
-			System.out.println(temp.item.MENU_ID);
-			if(temp.item.MENU_ID == MENU_ID) {
+			if(temp.item.STRING_ID.equals(STRING_ID) && temp.Spc_Req.equals(s)) {
 				if(temp.Quantity > 1) {
 					temp.Quantity -= 1;
 				} else {
@@ -152,48 +150,5 @@ public class CustomerHandler {
 		TOTAL_ORDERS.clear();
 		TOTAL_COST = 0;
 		TOTAL_QUANTITY = 0;
-	}
-	
-	/*
-	 * This function confirms the TOTAL ORDER and TOTAL COST and sends the information to the 
-	 * Kitchen and Waiting staff. Returns TRUE if successful.
-	 */
-	public boolean ConfirmOrder() {
-		/*
-		 *  mySQL statement
-		 */
-		return false;
-	}
-	
-	/*
-	 * This function notifies a waiter on duty that the customer would 
-	 * like their bill. Returns TRUE if a waiter can be notified.
-	 */
-	public boolean Pay_Bill() {
-		/*
-		 *  mySQL statement
-		 */
-		return false;
-	}
-
-	/*
-	 * This function gives an option to split the bill, and customize 
-	 * the TOTAL ORDER. Returns TRUE if it is successful.
-	 */
-	public boolean Split_Bill() {
-		/*
-		 *  mySQL statement
-		 */
-		return false;
-	}
-	
-	/*
-	 * This function calls the waiter to the table. Returns TRUE if successful.
-	 */
-	public boolean Call_Waiter() {
-		/*
-		 *  mySQL statement
-		 */
-		return false;
 	}
 }
