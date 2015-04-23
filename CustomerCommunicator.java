@@ -89,21 +89,21 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 			this.connect("admin", "gradMay17");
 			this.tell("use MAINDB;");
 			ResultSet rs = this.tell("SELECT * FROM Table_Statuses;");
-			int table_id = 0;
+			ArrayList<Integer> pos_tables = new ArrayList<Integer>();
 			try {
 				rs.beforeFirst();
 				while(rs.next() == true) {
 					String s = rs.getString("C_Status");
 					if(s.equals("Occupied")) {
-						table_id = rs.getInt("Table_ID");
-						
+						pos_tables.add(rs.getInt("Table_ID"));
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		int random_index = (int)(Math.random() * pos_tables.size());
 		this.disconnect();
-		return table_id;
+		return pos_tables.get(random_index);
 	}
 	
 	public boolean isOnline() {
