@@ -48,7 +48,16 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 		return items;
 	}
 	public void init() throws SQLException {
-		
+			this.connect("admin", "gradMay17");
+			this.tell("use MAINDB;");
+			if(counter == 0) {
+				ResultSet qq = this.tell("SELECT * FROM TABLE_ORDER");
+				int max = 0;
+				while(qq.next() == true) {
+					max = qq.getInt("ORDER_ID") > max ? qq.getInt("ORDER_ID") : max;
+				}
+				counter = max;
+			}
 	}
 	public void sendOrderOnline(TableOrder e) {
 		String template ="INSERT INTO TABLE_ORDER (ORDER_ID, TABLE_ID, EMPLOYEE_ID, ITEM_NAME, PRICE, QUANTITY, SPEC_INSTR, CURRENT_STATUS, MENU_ITEM_ID, SEAT_NUMBER) values (";
@@ -56,10 +65,9 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 		this.connect("admin", "gradMay17");
 		this.tell("use MAINDB;");
 		int size = e.FullTableOrder.size();
-		int n = 0;
 		for(int i = 0; i < size; i++) {
 			Order a = e.FullTableOrder.peek();
-			command += counter + ", ";
+			command += 0 + ", ";
 			command += e.TABLE_ID + ", ";
 			command += 0 + ", ";
 			command += "\"" + a.item.STRING_ID + "\", ";
@@ -68,13 +76,34 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 			command += "\"" + a.Spc_Req + "\", ";
 			command += "\"NOT READY\", ";
 			command += a.item.MENU_ID + ", ";
-			command += n%6 + ")";
+			command += counter + ")";
 			update(command);
 			command = "" + template;
 			e.FullTableOrder.remove();
-			n++;
 		}
+		counter++;
 		disconnect();
+	}
+	
+	public int getTableID() {
+			this.connect("admin", "gradMay17");
+			this.tell("use MAINDB;");
+			ResultSet rs = this.tell("SELECT * FROM Table_Statuses;");
+			int table_id = 0;
+			try {
+				rs.beforeFirst();
+				while(rs.next() == true) {
+					String s = rs.getString("C_Status");
+					if(s.equals("Occupied")) {
+						table_id = rs.getInt("Table_ID");
+						
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		this.disconnect();
+		return table_id;
 	}
 	
 	public boolean isOnline() {

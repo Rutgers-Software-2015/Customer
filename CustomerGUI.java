@@ -9,7 +9,6 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -85,6 +84,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			dis_inter = false;
 			menuButtons = new ArrayList<GradientButton>();
 			patron = new CustomerHandler(0);
+			patron.TABLE_ID = patron.net.getTableID();
 			patron.setMenu();
 			updateMenu = new Timer(5000,this);
 			updateMenu.setRepeats(true);
@@ -210,6 +210,10 @@ public class CustomerGUI extends JFrame implements ActionListener{
 					"Menu Item", "Spc Req?", "Cost", "#", "Total Cost"
 				}
 			) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
 				boolean[] columnEditables = new boolean[] {
 					false, false, false, false, false
 				};
@@ -483,7 +487,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
 				dft.removeRow(0);
 			}
-			TableOrder current = new TableOrder(patron.TOTAL_ORDERS, new Employee(), 0);
+			TableOrder current = new TableOrder(patron.TOTAL_ORDERS, new Employee(), patron.TABLE_ID);
 			patron.net.sendOrderOnline(current);
 			patron.historyTable.add(current);
 			patron.removeAll();

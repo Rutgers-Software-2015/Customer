@@ -76,6 +76,7 @@ public class CustomerHandler {
 		 * mySQL statement to get an available employee
 		 */
 		TableOrder temp = new TableOrder(TOTAL_ORDERS, new Employee(), TABLE_ID);
+		System.out.println(TABLE_ID);
 		TOTAL_ORDERS.clear();
 		TOTAL_QUANTITY = 0;
 		TOTAL_COST = 0;
