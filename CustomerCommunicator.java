@@ -50,14 +50,7 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 	public void init() throws SQLException {
 			this.connect("admin", "gradMay17");
 			this.tell("use MAINDB;");
-			if(counter == 0) {
-				ResultSet qq = this.tell("SELECT * FROM TABLE_ORDER");
-				int max = 0;
-				while(qq.next() == true) {
-					max = qq.getInt("ORDER_ID") > max ? qq.getInt("ORDER_ID") : max;
-				}
-				counter = max;
-			}
+			counter = 1;
 	}
 	public void sendOrderOnline(TableOrder e) {
 		String template ="INSERT INTO TABLE_ORDER (ORDER_ID, TABLE_ID, EMPLOYEE_ID, ITEM_NAME, PRICE, QUANTITY, SPEC_INSTR, CURRENT_STATUS, MENU_ITEM_ID, SEAT_NUMBER) values (";
@@ -81,7 +74,7 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 			command = "" + template;
 			e.FullTableOrder.remove();
 		}
-		counter++;
+		counter = (counter % 6) + 1;
 		disconnect();
 	}
 	
