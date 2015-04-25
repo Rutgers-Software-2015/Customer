@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -66,6 +67,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 		private JPanel panel_1;
 		private NotificationGUI note;
 		private boolean dis_inter;
+		Box b;
 		
 		public static void main(String[] args) {
 			// TODO Auto-generated method stub
@@ -119,19 +121,20 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			card3.setLayout(null);
 			
 			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-			scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-			scrollPane_1.setBounds(10, 21, 441, 559);
+			scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			scrollPane_1.setBounds(10, 21, 220, 559);
 			card3.add(scrollPane_1);
 			
+			b = Box.createVerticalBox();
+			
 			panel = new JPanel();
-			scrollPane_1.setViewportView(panel);
-			panel.setLayout(new GridLayout(0, 4, 0, 0));
+			scrollPane_1.setViewportView(b);
+			panel.setLayout(new GridLayout(5, 2, 2, 2));
 			
 			scrollPane = new JScrollPane();
 			scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			scrollPane.setBounds(461, 21, 451, 436);
+			scrollPane.setBounds(240, 21, 672, 436);
 			card3.add(scrollPane);
 			
 			tableOfOrders = new JTable();
@@ -246,17 +249,17 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			
 			panel_1 = new JPanel();
 			panel_1.setBorder(new TitledBorder(null, "Total", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel_1.setBounds(471, 468, 205, 88);
+			panel_1.setBounds(240, 468, 205, 88);
 			card3.add(panel_1);
 			panel_1.setLayout(null);
 			
 			lCost = new JLabel("$0.00");
-			lCost.setBounds(-11, 0, 216, 88);
+			lCost.setBounds(0, 0, 216, 88);
 			panel_1.add(lCost);
 			lCost.setFont(new Font("Tahoma", Font.PLAIN, 48));
 			lCost.setHorizontalAlignment(SwingConstants.CENTER);
 			for(GradientButton a : menuButtons) {
-				panel.add(a);
+				b.add(a);
 			}
 			c.show(cardPanel, "BLANK");
 			this.setVisible(true);
@@ -320,8 +323,8 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				}
 				
 			}
-			for(GradientButton b : menuButtons) {
-				panel.add(b);
+			for(GradientButton c : menuButtons) {
+				b.add(c);
 			}
 			repaint();
 		}
@@ -444,6 +447,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				menuButtons.add(new GradientButton("<html><br>" + patron.items.get(i).STRING_ID + ":<br>" + nf.format(patron.items.get(i).PRICE) + "</html>"));
 				menuButtons.get(i).setFont(new Font("Tahoma", Font.PLAIN, 16));
 				menuButtons.get(i).addActionListener(this);
+				menuButtons.get(i).setBounds(200,200, 200, 200);
 				menuButtons.get(i).setToolTipText(patron.items.get(i).DESCRIPTION);
 			}
 			cardPanel.setVisible(true);
@@ -498,13 +502,18 @@ public class CustomerGUI extends JFrame implements ActionListener{
 		
 		public void addOrder(String name, String instr) {
 			int code = 0;
+			MenuItem t = null;
 			for(MenuItem a : patron.items) {
 				if(name.equals(a.STRING_ID)) {
 					code = a.MENU_ID;
+					t = a;
 				}
 			}
+			if(t == null) {
+				return;
+			}
 			Order s = new Order(code, 1, "", 0);
-			s.item = patron.items.get(code - 1);
+			s.item = t;
 			s.Order_ID = 0;
 			s.Spc_Req = instr;
 			patron.Add_Order(s);
@@ -539,6 +548,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			if(a == backButton)
 				{
 					new LoginWindow();
+					note.close();
 					dispose();
 					enable();
 				}
