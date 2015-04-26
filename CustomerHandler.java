@@ -143,6 +143,7 @@ public class CustomerHandler {
 				}
 				updateCount();
 				TOTAL_COST -= cost;
+				
 			}
 		}
 		return found;

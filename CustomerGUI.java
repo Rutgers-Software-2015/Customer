@@ -45,28 +45,28 @@ public class CustomerGUI extends JFrame implements ActionListener{
 	 */
 	private static final long serialVersionUID = 7540704493585273347L;
 		//Parent Panels
-		private JPanel rootPanel,titlePanel,buttonPanel;
-		private GradientPanel backgroundPanel,buttonPanelBackground,cardPanel;
-		private GradientPanel card1,card3;
+		public JPanel rootPanel,titlePanel,buttonPanel;
+		public GradientPanel backgroundPanel,buttonPanelBackground,cardPanel;
+		public GradientPanel card1,card3;
 		//Swing Objects
-		private GradientButton backButton,bCallWaiter,bToggleAR,bPlaceOrder,bPayOrder;
-		private JLabel titleLabel,dateAndTime;
+		public GradientButton backButton,bCallWaiter,bToggleAR,bPlaceOrder,bPayOrder;
+		public JLabel titleLabel,dateAndTime;
 		//Swing Layouts
-		private CardLayout c;
+		public CardLayout c;
 		//Other Variables
-		private Timer timer;
-		private Timer updateMenu;
-		private CustomerHandler patron;
-		private JTable tableOfOrders;
-		private JScrollPane scrollPane;
-		private ArrayList<GradientButton> menuButtons;
-		private JPanel panel;
-		private JScrollPane scrollPane_1;
-		private JLabel lCost;
-		private GradientButton bHelp;
-		private JPanel panel_1;
-		private NotificationGUI note;
-		private boolean dis_inter;
+		public Timer timer;
+		public Timer updateMenu;
+		public CustomerHandler patron;
+		public JTable tableOfOrders;
+		public JScrollPane scrollPane;
+		public ArrayList<GradientButton> menuButtons;
+		public JPanel panel;
+		public JScrollPane scrollPane_1;
+		public JLabel lCost;
+		public GradientButton bHelp;
+		public JPanel panel_1;
+		public NotificationGUI note;
+		public boolean dis_inter;
 		Box b;
 			
 		public CustomerGUI()
@@ -104,10 +104,8 @@ public class CustomerGUI extends JFrame implements ActionListener{
 	            public void windowClosing(WindowEvent e)
 	            {
 	               
-	                dispose();
-	                patron.net.disconnect();
-	                note.close();
-	                new LoginWindow();
+	            	closeWindow();
+	            	new LoginWindow();
 	            }
 	        });
 			
@@ -440,18 +438,19 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			cardPanel.setVisible(true);
 		}
 		
-		public void removeOrder(int row) {
+		public boolean removeOrder(int row) {
+			boolean gone = false;
+			boolean removed = false;
 			try {
 				if(patron.TOTAL_QUANTITY > 0) {
 					DefaultTableModel dft = (DefaultTableModel) tableOfOrders.getModel();	
 					String name =  (String) tableOfOrders.getValueAt(row, 0);
 					String s = (String) tableOfOrders.getValueAt(row, 1);
-					System.out.println(name + " " + s);
 					if(s == null) {
 						s = "";
 					}
 					
-					boolean gone = patron.Remove_Order(name, s);
+					gone = patron.Remove_Order(name, s);
 					NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
 					String w = nf.format(patron.TOTAL_COST);
 					lCost.setText(w);
@@ -465,12 +464,15 @@ public class CustomerGUI extends JFrame implements ActionListener{
 							tableOfOrders.setValueAt(patron.TOTAL_ORDERS.get(i).Quantity, i, 3);
 							tableOfOrders.setValueAt(nf.format(patron.TOTAL_ORDERS.get(i).Quantity * patron.TOTAL_ORDERS.get(i).item.PRICE), i, 4);
 						}
+						removed = true;
 					}
 				}
+				
 			} catch (Exception e1) {
 				
 			}
 			repaint();
+			return (gone || removed);
 		}
 		
 		public void placeOrder() {
@@ -487,7 +489,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			repaint();
 		}
 		
-		public void addOrder(String name, String instr) {
+		public boolean addOrder(String name, String instr) {
 			int code = 0;
 			MenuItem t = null;
 			for(MenuItem a : patron.items) {
@@ -497,13 +499,13 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				}
 			}
 			if(t == null) {
-				return;
+				return false;
 			}
 			Order s = new Order(code, 1, "", 0);
 			s.item = t;
 			s.Order_ID = 0;
 			s.Spc_Req = instr;
-			patron.Add_Order(s);
+			boolean done = patron.Add_Order(s);
 			NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
 			String w = nf.format(patron.TOTAL_COST);
 			for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
@@ -516,6 +518,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			
 			lCost.setText(w);
 			repaint();
+			return done;
 		}
 		// Action Listener
 		public void actionPerformed(ActionEvent e) 
@@ -534,9 +537,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			}
 			if(a == backButton)
 				{
-						note.close();
-						patron.net.disconnect();
-						dispose();
+						closeWindow();
 						new LoginWindow();
 				}
 			if(a == bCallWaiter)
@@ -615,7 +616,12 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				disable();
 			}
 		}
-		
+		@SuppressWarnings("deprecation")
+		public void closeWindow() {
+			note.close();
+			patron.net.disconnect();
+			dispose();
+		}
 		private void updateClock() {
             dateAndTime.setText(DateFormat.getDateTimeInstance().format(new Date()));
         }
