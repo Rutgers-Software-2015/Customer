@@ -552,17 +552,17 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			if(a == bCallWaiter)
 			{
 				String[] options = {"Okay"};
-				enable();
-				JOptionPane.showOptionDialog(new JFrame(), "NOT YET IMPLEMENTED.", 
+				note.sendMessage("Waiter", "A customer at table " + patron.TABLE_ID + " requires assistance.");
+				JOptionPane.showOptionDialog(new JFrame(), "The Waiting Staff has been alerted.", 
 					"...", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, 0);
-				disable();
+				
 			}
 			if(a == bPlaceOrder)
 				{
 					enable();
 					placeOrder();
 					String[] options = {"Okay!"};
-					JOptionPane.showOptionDialog(new JFrame(), "Your Order has been sent to the Kitchen!", 
+					JOptionPane.showOptionDialog(new JFrame(), "Your order has been sent to the kitchen!", 
 						"Order Placed!!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, 0);
 					disable();
 				}
@@ -570,7 +570,8 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				{
 				enable();
 				String[] options = {"Okay"};
-				JOptionPane.showOptionDialog(new JFrame(), "NOT YET IMPLEMENTED.", 
+				note.sendMessage("Waiter", "A customer at table " + patron.TABLE_ID + " would like to pay for their order.");
+				JOptionPane.showOptionDialog(new JFrame(), "A waiter will come shortly for payment.", 
 					"...", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, 0);
 				disable();
 				}
