@@ -74,6 +74,10 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			super();
 			
 			init();
+			if(patron.TABLE_ID == -1) {
+				closeWindow();
+				new LoginWindow();
+			}
 		}
 
 		public void init()
@@ -82,12 +86,15 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			menuButtons = new ArrayList<GradientButton>();
 			patron = new CustomerHandler(0);
 			patron.TABLE_ID = patron.net.getTableID();
+			
 			patron.setMenu();
 			updateMenu = new Timer(5000,this);
 			updateMenu.setRepeats(true);
 			updateMenu.setCoalesce(true);
             updateMenu.setInitialDelay(5000);
             updateMenu.start();
+            
+            
             
 			this.setTitle("Place Orders");
 			this.setResizable(true);
@@ -108,6 +115,8 @@ public class CustomerGUI extends JFrame implements ActionListener{
 	            	new LoginWindow();
 	            }
 	        });
+			
+			
 			
 			c = (CardLayout)(cardPanel.getLayout());
 			
@@ -618,9 +627,11 @@ public class CustomerGUI extends JFrame implements ActionListener{
 		}
 		@SuppressWarnings("deprecation")
 		public void closeWindow() {
-			note.close();
+			if(note != null) {
+				note.close();
+			}
 			patron.net.disconnect();
-			dispose();
+			this.dispose();
 		}
 		private void updateClock() {
             dateAndTime.setText(DateFormat.getDateTimeInstance().format(new Date()));

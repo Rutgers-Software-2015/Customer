@@ -11,6 +11,9 @@ import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 public class CustomerCommunicator extends DatabaseCommunicator {
 
 	public static int counter;
@@ -76,6 +79,7 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 	}
 	
 	public int getTableID() {
+		try {
 			ResultSet rs = this.tell("SELECT * FROM Table_Statuses;");
 			ArrayList<Integer> pos_tables = new ArrayList<Integer>();
 			try {
@@ -89,8 +93,12 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		int random_index = (int)(Math.random() * pos_tables.size());
-		return pos_tables.get(random_index);
+			int random_index = (int)(Math.random() * pos_tables.size());
+			return pos_tables.get(random_index);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			JOptionPane.showMessageDialog(new JFrame(), "There are no seated tables, this interface is unavailable.");
+			return -1;
+		}
 	}
 	
 	public boolean isOnline() {
