@@ -68,11 +68,6 @@ public class CustomerGUI extends JFrame implements ActionListener{
 		private NotificationGUI note;
 		private boolean dis_inter;
 		Box b;
-		
-		public static void main(String[] args) {
-			// TODO Auto-generated method stub
-			new CustomerGUI();
-		}
 			
 		public CustomerGUI()
 		{
@@ -108,8 +103,11 @@ public class CustomerGUI extends JFrame implements ActionListener{
 	            @Override
 	            public void windowClosing(WindowEvent e)
 	            {
-	                new LoginWindow();
+	               
 	                dispose();
+	                patron.net.disconnect();
+	                note.close();
+	                new LoginWindow();
 	            }
 	        });
 			
@@ -141,7 +139,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			tableOfOrders.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			tableOfOrders.setShowGrid(false);
 			tableOfOrders.setShowHorizontalLines(false);
-			tableOfOrders.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			tableOfOrders.setFont(new Font("Arial", Font.PLAIN, 20));
 			tableOfOrders.setShowVerticalLines(false);
 			tableOfOrders.setRowHeight(24);
 			tableOfOrders.setModel(new DefaultTableModel(
@@ -212,22 +210,11 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				new String[] {
 					"Menu Item", "Spc Req?", "Cost", "#", "Total Cost"
 				}
-			) {
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
-				boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false
-				};
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
-			});
+			));
 			tableOfOrders.getColumnModel().getColumn(0).setResizable(false);
-			tableOfOrders.getColumnModel().getColumn(0).setPreferredWidth(100);
+			tableOfOrders.getColumnModel().getColumn(0).setPreferredWidth(150);
 			tableOfOrders.getColumnModel().getColumn(1).setResizable(false);
-			tableOfOrders.getColumnModel().getColumn(1).setPreferredWidth(57);
+			tableOfOrders.getColumnModel().getColumn(1).setPreferredWidth(200);
 			tableOfOrders.getColumnModel().getColumn(2).setResizable(false);
 			tableOfOrders.getColumnModel().getColumn(2).setPreferredWidth(26);
 			tableOfOrders.getColumnModel().getColumn(3).setResizable(false);
@@ -239,7 +226,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			
 			bHelp = new GradientButton("Need Help?");
 			bHelp.addActionListener(this);
-			bHelp.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			bHelp.setFont(new Font("arial", Font.PLAIN, 18));
 			bHelp.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 				}
@@ -256,7 +243,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			lCost = new JLabel("$0.00");
 			lCost.setBounds(0, 0, 216, 88);
 			panel_1.add(lCost);
-			lCost.setFont(new Font("Tahoma", Font.PLAIN, 48));
+			lCost.setFont(new Font("arial", Font.PLAIN, 48));
 			lCost.setHorizontalAlignment(SwingConstants.CENTER);
 			for(GradientButton a : menuButtons) {
 				b.add(a);
@@ -316,10 +303,10 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
 			for(int i = 0; i < patron.items.size(); i++) {
 				if(patron.items.get(i).VALID) {
-					menuButtons.add(new GradientButton("<html><br>" + patron.items.get(i).STRING_ID + ":<br>" + nf.format(patron.items.get(i).PRICE) + "</html>"));
-					menuButtons.get(i).setFont(new Font("Tahoma", Font.PLAIN, 16));
+					menuButtons.add(new GradientButton("<html><br>" + patron.items.get(i).STRING_ID + "<br> <br>" + "</html>"));
+					menuButtons.get(i).setFont(new Font("arial", Font.PLAIN, 18));
 					menuButtons.get(i).addActionListener(this);
-					menuButtons.get(i).setToolTipText(patron.items.get(i).DESCRIPTION);
+					menuButtons.get(i).setToolTipText("(" + nf.format(patron.items.get(i).PRICE) + ") " + patron.items.get(i).DESCRIPTION);
 				}
 				
 			}
@@ -444,11 +431,11 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			card1.setLayout(new GridLayout(0, 1, 0, 0));
 			NumberFormat nf = NumberFormat.getCurrencyInstance( java.util.Locale.US );
 			for(int i = 0; i < patron.items.size(); i++) {
-				menuButtons.add(new GradientButton("<html><br>" + patron.items.get(i).STRING_ID + ":<br>" + nf.format(patron.items.get(i).PRICE) + "</html>"));
-				menuButtons.get(i).setFont(new Font("Tahoma", Font.PLAIN, 16));
+				menuButtons.add(new GradientButton("<html><br>" + patron.items.get(i).STRING_ID + "<br> <br>" + "</html>"));
+				menuButtons.get(i).setFont(new Font("arial", Font.PLAIN, 18));
 				menuButtons.get(i).addActionListener(this);
 				menuButtons.get(i).setBounds(200,200, 200, 200);
-				menuButtons.get(i).setToolTipText(patron.items.get(i).DESCRIPTION);
+				menuButtons.get(i).setToolTipText("(" + nf.format(patron.items.get(i).PRICE) + ") " + patron.items.get(i).DESCRIPTION);
 			}
 			cardPanel.setVisible(true);
 		}
@@ -547,10 +534,10 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			}
 			if(a == backButton)
 				{
-					new LoginWindow();
-					note.close();
-					dispose();
-					enable();
+						note.close();
+						patron.net.disconnect();
+						dispose();
+						new LoginWindow();
 				}
 			if(a == bCallWaiter)
 			{
@@ -608,13 +595,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 						a1 = a1.replaceAll("<html>", "");
 						a1 = a1.replaceAll("</html>", "");
 						a1 = a1.replaceAll("<br>", "");
-						
-						for(int j = 0; j < menuButtons.get(i).getText().length(); j++) {
-							if(a1.charAt(j) == ':') {
-								a1 = a1.substring(0, j);
-								break;
-							}
-						}
+						a1 = a1.substring(0, a1.length()-1);
 						String instr = JOptionPane.showInputDialog("Let us know if you'd like your " + a1 + " prepared differently:");
 						if(instr == null) {
 							instr = "";

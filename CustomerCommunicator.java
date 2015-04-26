@@ -18,8 +18,6 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
 		boolean online = this.isOnline();
 		if(online) {
-			this.connect("admin", "gradMay17");
-			this.tell("use MAINDB;");
 			ResultSet rs = this.tell("SELECT * FROM MENU;");
 		
 			items = new ArrayList<MenuItem>();
@@ -44,7 +42,6 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 				}
 			}
 		}
-		this.disconnect();
 		return items;
 	}
 	public void init() throws SQLException {
@@ -52,11 +49,12 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 			this.tell("use MAINDB;");
 			counter = 1;
 	}
+	public void disconnectGUI() {
+		disconnect();
+	}
 	public void sendOrderOnline(TableOrder e) {
 		String template ="INSERT INTO TABLE_ORDER (ORDER_ID, TABLE_ID, EMPLOYEE_ID, ITEM_NAME, PRICE, QUANTITY, SPEC_INSTR, CURRENT_STATUS, MENU_ITEM_ID, SEAT_NUMBER) values (";
 		String command = "" + template;
-		this.connect("admin", "gradMay17");
-		this.tell("use MAINDB;");
 		int size = e.FullTableOrder.size();
 		for(int i = 0; i < size; i++) {
 			Order a = e.FullTableOrder.peek();
@@ -75,12 +73,9 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 			e.FullTableOrder.remove();
 		}
 		counter = (counter % 6) + 1;
-		disconnect();
 	}
 	
 	public int getTableID() {
-			this.connect("admin", "gradMay17");
-			this.tell("use MAINDB;");
 			ResultSet rs = this.tell("SELECT * FROM Table_Statuses;");
 			ArrayList<Integer> pos_tables = new ArrayList<Integer>();
 			try {
@@ -95,7 +90,6 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 				e.printStackTrace();
 			}
 		int random_index = (int)(Math.random() * pos_tables.size());
-		this.disconnect();
 		return pos_tables.get(random_index);
 	}
 	
