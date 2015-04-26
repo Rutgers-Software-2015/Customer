@@ -41,7 +41,11 @@ public class CustomerGUI extends JFrame implements ActionListener{
 
 	
 	/**
-	 * Author: Rob
+	 * Class created to represent Graphical User Interface to the customer.
+	 * 
+	 * @author Robert Schultz
+	 * @tester Robert Schultz
+	 * @debugger Robert Schultz
 	 */
 	private static final long serialVersionUID = 7540704493585273347L;
 		//Parent Panels
@@ -68,7 +72,10 @@ public class CustomerGUI extends JFrame implements ActionListener{
 		public NotificationGUI note;
 		public boolean dis_inter;
 		Box b;
-			
+		
+		/*
+		 * Constructor. Initializes the interface. Checks Table Number.
+		 */
 		public CustomerGUI()
 		{
 			super();
@@ -79,7 +86,10 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				new LoginWindow();
 			}
 		}
-
+		
+		/*
+		 * Initializer function. Sets initial values and creates all instances.
+		 */
 		public void init()
 		{
 			dis_inter = false;
@@ -258,7 +268,10 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			c.show(cardPanel, "BLANK");
 			this.setVisible(true);
 		}
-
+		
+		/*
+		 * Front end GUI manipulation, calls remaining functions to change GUI.
+		 */
 		public void frameManipulation()
 		{
 			rootPanel = new JPanel();
@@ -270,6 +283,9 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			setRootPanel();
 		}
 		
+		/*
+		 * Modifies the root panel and adds everything onto it.
+		 */
 		private void setRootPanel()
 		{
 			note = new NotificationGUI(42, "Customer");
@@ -281,6 +297,9 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			rootPanel.add(backgroundPanel);
 		}
 		
+		/*
+		 * Configures the background panel.
+		 */
 		private void setBackgroundPanel()
 		{
 			// Create Button Background Panel
@@ -297,9 +316,9 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			backgroundPanel.setBounds(0,0,1194,672);
 		}
 		
-		//************************************************************
-		//DO NOT edit the following function except for the title name
-		//************************************************************
+		/*
+		 * Pings the database for menu items and updates buttons as well.
+		 */
 		private void pingDatabase() {
 			patron.items = new ArrayList<MenuItem>();
 			patron.setMenu();
@@ -322,6 +341,10 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			}
 			repaint();
 		}
+		
+		/*
+		 * Modifies the title panel
+		 */
 		private void setTitlePanel()
 		{
 			// Create Title Panel
@@ -354,10 +377,9 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			            timer.start();
 		}
 		
-		//*********************************************************
-		//DO NOT change the location of the following panel
-		//*********************************************************
-		
+		/*
+		 * Modifies the sidebar buttons.
+		 */
 		private void setButtonPanel()
 		{
 			// Create Button Panel
@@ -418,11 +440,9 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			buttonPanel.add(backButton);
 		}
 		
-		//********************************************************************************
-		//DO NOT deviate from the card layout or change the size/location of the cardPanel.
-		//Creating and adding cards is OK
-		//********************************************************************************
-		
+		/*
+		 * Modifies the display inside the GUI (This GUI only has one display)
+		 */
 		private void setCardPanel()
 		{
 			cardPanel = new GradientPanel();
@@ -447,6 +467,10 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			cardPanel.setVisible(true);
 		}
 		
+		/*
+		 * Function removes an order given a designated row.
+		 * Returns true if successful.
+		 */
 		public boolean removeOrder(int row) {
 			boolean gone = false;
 			boolean removed = false;
@@ -484,6 +508,9 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			return (gone || removed);
 		}
 		
+		/*
+		 * Function places order and sends to kitchen.
+		 */
 		public void placeOrder() {
 			DefaultTableModel dft = (DefaultTableModel) tableOfOrders.getModel();
 			for(int i = 0; i < patron.TOTAL_ORDERS.size(); i++) {
@@ -498,6 +525,9 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			repaint();
 		}
 		
+		/*
+		 * Function adds an order into table
+		 */
 		public boolean addOrder(String name, String instr) {
 			int code = 0;
 			MenuItem t = null;
@@ -529,6 +559,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
 			repaint();
 			return done;
 		}
+		
 		// Action Listener
 		public void actionPerformed(ActionEvent e) 
 		{
@@ -637,11 +668,17 @@ public class CustomerGUI extends JFrame implements ActionListener{
 		private void updateClock() {
             dateAndTime.setText(DateFormat.getDateTimeInstance().format(new Date()));
         }
+		/*
+		 * Enables critical section (synchronization)
+		 */
 		public synchronized void enable() {
 			dis_inter = true;
 			timer.stop();
 			updateMenu.stop();
 		}
+		/*
+		 * Disables critical section.
+		 */
 		public synchronized void disable() {
 			dis_inter = false;
 			timer.start();

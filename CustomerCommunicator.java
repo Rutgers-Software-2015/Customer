@@ -17,6 +17,9 @@ import javax.swing.JOptionPane;
 public class CustomerCommunicator extends DatabaseCommunicator {
 
 	public static int counter;
+	/*
+	 * Pings SQL database for all menu details and returns an arrayList
+	 */
 	public ArrayList<MenuItem> readMenu() throws SQLException {
 		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
 		boolean online = this.isOnline();
@@ -47,14 +50,26 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 		}
 		return items;
 	}
+	
+	/*
+	 * Connects to the SQL database. once.
+	 */
 	public void init() throws SQLException {
 			this.connect("admin", "gradMay17");
 			this.tell("use MAINDB;");
 			counter = 1;
 	}
+	
+	/*
+	 * Disconnects from the SQL database
+	 */
 	public void disconnectGUI() {
 		disconnect();
 	}
+	
+	/*
+	 * Pushes a TableOrder onto the SQL database
+	 */
 	public void sendOrderOnline(TableOrder e) {
 		String template ="INSERT INTO TABLE_ORDER (ORDER_ID, TABLE_ID, EMPLOYEE_ID, ITEM_NAME, PRICE, QUANTITY, SPEC_INSTR, CURRENT_STATUS, MENU_ITEM_ID, SEAT_NUMBER) values (";
 		String command = "" + template;
