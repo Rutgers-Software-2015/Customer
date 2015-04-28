@@ -227,7 +227,14 @@ public class CustomerGUI extends JFrame implements ActionListener{
 				new String[] {
 					"Menu Item", "Spc Req?", "Cost", "#", "Total Cost"
 				}
-			));
+			) {
+				boolean[] columnEditables = new boolean[] {
+					false, false, false, false, false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+			});
 			tableOfOrders.getColumnModel().getColumn(0).setResizable(false);
 			tableOfOrders.getColumnModel().getColumn(0).setPreferredWidth(150);
 			tableOfOrders.getColumnModel().getColumn(1).setResizable(false);
