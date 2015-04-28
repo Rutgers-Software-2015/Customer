@@ -22,7 +22,7 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 	 */
 	public ArrayList<MenuItem> readMenu() throws SQLException {
 		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
-		boolean online = this.isOnline();
+		boolean online = true;
 		if(online) {
 			ResultSet rs = this.tell("SELECT * FROM MENU;");
 		
@@ -110,35 +110,9 @@ public class CustomerCommunicator extends DatabaseCommunicator {
 			}
 			int random_index = (int)(Math.random() * pos_tables.size());
 			return pos_tables.get(random_index);
-		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(new JFrame(), "There are no seated tables, this interface is unavailable.");
 			return -1;
 		}
-	}
-	
-	public boolean isOnline() {
-		try
-		{
-			URL yourl = new URL("http://google.com");
-			HttpURLConnection yourlConnect = (HttpURLConnection)yourl.openConnection();
-			yourlConnect.setConnectTimeout(2000);
-			yourlConnect.getContent();
-		}catch(UnknownHostException e)
-		{
-			return false;
-		}
-		catch(IOException e)
-		{
-			return false;
-		}
-		return true;
-	}
-	
-	public boolean pushTableOrder(TableOrder e) {
-		boolean successful = false;
-		/*
-		 * 
-		 */
-		return successful;
 	}
 }
