@@ -15,11 +15,15 @@ import java.util.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 public class CustomerCommunicator extends DatabaseCommunicator {
-
-	public static int counter;
-	/*
-	 * Pings SQL database for all menu details and returns an arrayList
+	
+	/**
+	 *  Pings SQL database for all menu details and returns an arrayList
+	 * 
+	 * @author Robert Schultz
+	 * @tester Robert Schultz
+	 * @debugger Robert Schultz
 	 */
+	public static int counter;
 	public ArrayList<MenuItem> readMenu() throws SQLException {
 		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
 		boolean online = true;

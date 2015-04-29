@@ -13,7 +13,9 @@ import Shared.ADT.TableOrder;
  * for the customer.
  * 
  * @author Robert Schultz
- *
+ * @tester Robert Schultz
+ * @debugger Robert Schultz
+ * 
  */
 
 public class CustomerHandler {

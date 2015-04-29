@@ -36,17 +36,17 @@ import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 
 
+/**
+ * Class created to represent Graphical User Interface to the customer.
+ * 
+ * @author Robert Schultz
+ * @tester Robert Schultz
+ * @debugger Robert Schultz
+ */
 
 public class CustomerGUI extends JFrame implements ActionListener{
 
-	
-	/**
-	 * Class created to represent Graphical User Interface to the customer.
-	 * 
-	 * @author Robert Schultz
-	 * @tester Robert Schultz
-	 * @debugger Robert Schultz
-	 */
+
 	private static final long serialVersionUID = 7540704493585273347L;
 		//Parent Panels
 		public JPanel rootPanel,titlePanel,buttonPanel;
