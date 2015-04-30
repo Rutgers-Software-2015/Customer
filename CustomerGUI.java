@@ -106,7 +106,7 @@ public class CustomerGUI extends JFrame implements ActionListener{
             
             
             
-			this.setTitle("Place Orders");
+			this.setTitle("Table: "+patron.TABLE_ID);
 			this.setResizable(true);
 			this.setSize(1200,700);
 			this.frameManipulation();
